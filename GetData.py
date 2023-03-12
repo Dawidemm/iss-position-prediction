@@ -1,11 +1,16 @@
 import json
 import requests
-import time
-
-URL = 'http://api.open-notify.org/iss-now.json'
+from Settings import SettingsMakeDataset
 
 class FetchData():
-    def __init__(self, duration: int, url: str) -> None:
+    def __init__(self, duration: int = SettingsMakeDataset.duration, url: str = SettingsMakeDataset.url) -> None:
+        '''
+        Fetch data from the API and return the longitude and latitude of the ISS
+
+        parameters:
+        duration: int
+        url: str
+        '''
         self.duration = duration
         self.url = url
 
@@ -20,26 +25,22 @@ class FetchData():
 
     def __iter__(self):
         return self
-
-
 class MakeDataset():
-    def __init__(self, duration: int) -> None:
+    '''
+    Make a dataset from the data fetched from the API and save it as a csv file
+
+    parameters:
+    duration: int
+    '''
+    def __init__(self, duration: int = SettingsMakeDataset.duration) -> None:
         self.duration = duration
-    
+
     def save_as_csv(self) -> None:
-        trainig_dataset = open('training_dataset_test.csv', 'w')
-        data_generator = FetchData(duration=self.duration, url=URL)
+        trainig_dataset = open(SettingsMakeDataset.where, 'w')
+        data_generator = FetchData(self.duration)
         
         for _ in range(self.duration):
             position = next(data_generator)
             trainig_dataset.write(f'{position[0]}, {position[1]}\n')
 
-
         return None
-    
-t1 = time.time()
-training_data = MakeDataset(duration=50000)
-training_data.save_as_csv()
-t2 = time.time()
-
-t = t2 - t1
