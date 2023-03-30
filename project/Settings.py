@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-
+import tensorflow as tf
 @dataclass
 class SettingsMakeDataset:
     '''
@@ -13,3 +13,14 @@ class SettingsMakeDataset:
     duration: int = 25
     where: str = 'dataset.csv'
     url: str = 'http://api.open-notify.org/iss-now.json'
+
+@dataclass
+class SettingsModel:
+    '''
+    Settings for fittig the neural network model
+    '''
+    EPOCHS = 25
+    LEARNING_RATE = 0.001
+    EARLY_STOPPING = tf.keras.callbacks.EarlyStopping(patience=5)
+    MODEL_CHECKPOINT = tf.keras.callbacks.ModelCheckpoint('project/testModel.h5', save_best_only=True)
+    HISTORY = tf.keras.callbacks.History()
