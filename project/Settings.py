@@ -11,9 +11,9 @@ class SettingsMakeDataset:
     duration: int  # How many data points to fetch
     url: str  # The url of the API
     '''
-    duration: int = 25
-    where: str = 'dataset.csv'
-    url: str = 'http://api.open-notify.org/iss-now.json'
+    DURATION: int = 25
+    WHERE: str = 'dataset.csv'
+    URL: str = 'http://api.open-notify.org/iss-now.json'
 
 @dataclass
 class SettingsModel:
