@@ -3,7 +3,7 @@ import requests
 from Settings import SettingsMakeDataset
 
 class FetchData():
-    def __init__(self, duration: int = SettingsMakeDataset.duration, url: str = SettingsMakeDataset.url) -> None:
+    def __init__(self, duration: int = SettingsMakeDataset.DURATION, url: str = SettingsMakeDataset.URL) -> None:
         '''
         Fetch data from the API and return the longitude and latitude of the ISS
 
@@ -32,11 +32,11 @@ class MakeDataset():
     parameters:
     duration: int
     '''
-    def __init__(self, duration: int = SettingsMakeDataset.duration) -> None:
+    def __init__(self, duration: int = SettingsMakeDataset.DURATION) -> None:
         self.duration = duration
 
     def save_as_csv(self) -> None:
-        trainig_dataset = open(SettingsMakeDataset.where, 'w')
+        trainig_dataset = open(SettingsMakeDataset.WHERE, 'w')
         data_generator = FetchData(self.duration)
         
         for _ in range(self.duration):
