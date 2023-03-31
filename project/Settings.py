@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 import tensorflow as tf
+
 @dataclass
 class SettingsMakeDataset:
     '''
@@ -17,10 +18,17 @@ class SettingsMakeDataset:
 @dataclass
 class SettingsModel:
     '''
-    Settings for fittig the neural network model
+    Settings for the neural network model
+
+    parameters:
+    EPOCHS: int # Epochs of learning
+    LEARNING_RATE: float # Learning rate
+    EARLY_STOPPING: # tf.keras.callbacs object
+    MODEL_CHECKPOINT: # tf.keras.callbacs object
+    HISTORY: # tf.keras.callbacs object
     '''
-    EPOCHS = 25
-    LEARNING_RATE = 0.001
+    EPOCHS: int = 25
+    LEARNING_RATE: float = 0.001
     EARLY_STOPPING = tf.keras.callbacks.EarlyStopping(patience=5)
     MODEL_CHECKPOINT = tf.keras.callbacks.ModelCheckpoint('project/testModel.h5', save_best_only=True)
     HISTORY = tf.keras.callbacks.History()
