@@ -7,9 +7,9 @@ class SettingsMakeDataset:
     Settings for the MakeDataset class
 
     parameters:
-    where: str  # Where to save the dataset
-    duration: int  # How many data points to fetch
-    url: str  # The url of the API
+    WHERE: str  # Where to save the dataset
+    DURATION: int  # How many data points to fetch
+    URL: str  # The url of the API
     '''
     DURATION: int = 25
     WHERE: str = 'dataset.csv'
@@ -30,5 +30,5 @@ class SettingsModel:
     EPOCHS: int = 25
     LEARNING_RATE: float = 0.001
     EARLY_STOPPING = tf.keras.callbacks.EarlyStopping(patience=5)
-    MODEL_CHECKPOINT = tf.keras.callbacks.ModelCheckpoint('project/testModel.h5', save_best_only=True)
+    MODEL_CHECKPOINT = tf.keras.callbacks.ModelCheckpoint('project/ModelWeights.h5', save_best_only=True)
     HISTORY = tf.keras.callbacks.History()
