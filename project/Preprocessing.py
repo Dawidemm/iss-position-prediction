@@ -35,14 +35,14 @@ class PreprocessingTrainingDataset():
     
     def standard_scaled(self):
 
-        standard_scaler = StandardScaler()
+        self.standard_scaler = StandardScaler()
         self.dataset = np.array(self.dataset)
 
         self.target = self.dataset[:, [2, 3]]
         self.dataset = self.dataset[:, [0, 1]]
         
-        self.dataset = standard_scaler.fit_transform(self.dataset)
-        self.target = standard_scaler.transform(self.target)
+        self.dataset = self.standard_scaler.fit_transform(self.dataset)
+        self.target = self.standard_scaler.transform(self.target)
 
         return self
     
