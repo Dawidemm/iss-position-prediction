@@ -4,7 +4,6 @@ from matplotlib.animation import FuncAnimation
 from GetData import FetchData
 from Settings import SettingsMakeDataset
 from Model import neural_network
-from sklearn.metrics import r2_score
 
 model = neural_network()
 model.build(input_shape=(1, 2))
@@ -59,6 +58,6 @@ def animate(i):
     # ax3.plot(pred_longitude[0:i], pred_latitude[0:i], label='Real Position')
     # ax3.scatter(pred_longitude[0:i], pred_latitude[0:i], label='Predicted Position')
 
-fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, figsize=(8, 12))
+fig, (ax1, ax2) = plt.subplots(nrows=2, figsize=(8, 8))
 ani = FuncAnimation(plt.gcf(), animate, interval=500, cache_frame_data=False)
 plt.show()
