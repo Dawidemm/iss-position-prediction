@@ -16,7 +16,8 @@ class FetchData():
 
     def __next__(self) -> tuple:
 
-        for _ in range(self.duration):         
+        for _ in range(self.duration):
+
             answer = requests.get(self.url)
             answer = json.loads(answer.text)
             position = answer['iss_position']
@@ -37,10 +38,17 @@ class MakeDataset():
 
     def save_as_csv(self) -> None:
         trainig_dataset = open(SettingsMakeDataset.WHERE, 'w')
+        trainig_dataset.write(f'longitude,latitude\n')
+
         data_generator = FetchData(self.duration)
         
         for _ in range(self.duration):
             position = next(data_generator)
-            trainig_dataset.write(f'{position[0]}, {position[1]}\n')
+            trainig_dataset.write(f'{position[0]},{position[1]}\n')
 
         return None
+
+
+if __name__ == '__main__':
+    dataset = MakeDataset(duration=25000)
+    dataset.save_as_csv()
