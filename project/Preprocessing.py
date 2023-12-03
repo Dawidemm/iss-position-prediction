@@ -18,5 +18,5 @@ class myDataset(Dataset):
 
         current_row = torch.tensor([current_row['longitude'], current_row['latitude']], dtype=torch.float32) / self.max_val
         target = torch.tensor([target['longitude'], target['latitude']], dtype=torch.float32) / self.max_val
-
+        
         return current_row, target

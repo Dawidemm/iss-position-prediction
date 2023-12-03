@@ -3,7 +3,7 @@ import pandas as pd
 from Preprocessing import PreprocessingTrainingDataset
 from Settings import SettingsModel
 
-def build_and_compile_model() -> tf.keras.models.Sequential:
+def neural_network() -> tf.keras.models.Sequential:
 
     model = tf.keras.models.Sequential()
     model.add(tf.keras.layers.Dense(units=2))
@@ -24,7 +24,7 @@ def model_fit(dataset: pd.DataFrame) -> tf.keras.models.Sequential:
     train_dataset, train_target = dataset.train()
     val_dataset, val_target = dataset.val()
 
-    model = build_and_compile_model()
+    model = neural_network()
 
     model.fit(train_dataset, train_target, 
             epochs=SettingsModel.EPOCHS, 
