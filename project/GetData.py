@@ -33,11 +33,12 @@ class MakeDataset():
     parameters:
     duration: int
     '''
-    def __init__(self, duration: int = SettingsMakeDataset.DURATION) -> None:
+    def __init__(self, type: str, duration: int = SettingsMakeDataset.DURATION) -> None:
         self.duration = duration
+        self.type = type
 
     def save_as_csv(self) -> None:
-        trainig_dataset = open(SettingsMakeDataset.WHERE, 'w')
+        trainig_dataset = open(f'{self.type}_{SettingsMakeDataset.WHERE}', 'w')
         trainig_dataset.write(f'longitude,latitude\n')
 
         data_generator = FetchData(self.duration)
@@ -50,5 +51,5 @@ class MakeDataset():
 
 
 if __name__ == '__main__':
-    dataset = MakeDataset(duration=25000)
+    dataset = MakeDataset(type='test', duration=1800)
     dataset.save_as_csv()
