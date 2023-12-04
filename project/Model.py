@@ -19,7 +19,7 @@ class myModel(nn.Module):
         return self.net(x)
     
 class myLitModel(pl.LightningModule):
-    def __init__(self, model, metric):
+    def __init__(self, model, metric=torchmetrics.MeanSquaredError()):
         super().__init__()
         self.model = model
         self.metric = metric
@@ -36,7 +36,7 @@ class myLitModel(pl.LightningModule):
 
         self.train_metric = self.metric
         self.train_metric(outputs, y)
-        self.log('train_acc', self.train_metric, prog_bar=True, on_epoch=True, on_step=False)
+        self.log('train_mse', self.train_metric.compute(), prog_bar=True, on_epoch=True, on_step=False)
 
         return loss
 
@@ -48,7 +48,7 @@ class myLitModel(pl.LightningModule):
 
         self.val_metric = self.metric
         self.val_metric(outputs, y)
-        self.log('train_acc', self.val_metric, prog_bar=True, on_epoch=True, on_step=False)
+        self.log('val_mse', self.val_metric.compute(), prog_bar=True)
 
         return {"val_loss": loss}
 
@@ -59,7 +59,7 @@ class myLitModel(pl.LightningModule):
         return {"test_loss": loss}
 
     def configure_optimizers(self):
-        optimizer = torch.optim.Adam(self.parameters(), lr=0.01)
+        optimizer = torch.optim.Adam(self.parameters(), lr=0.001)
         return optimizer
     
 train_dataset_path = './train_dataset.csv'
@@ -77,6 +77,9 @@ test_dataloader = DataLoader(test_dataset, batch_size=256, shuffle=False)
 torch_model = myModel()
 lit_model = myLitModel(torch_model)
 
-trainer = pl.Trainer(max_epochs=10, accelerator='auto')
+trainer = pl.Trainer(max_epochs=50, accelerator='auto')
 trainer.fit(lit_model, train_dataloaders=train_dataloader, val_dataloaders=val_dataloader)
 trainer.test(dataloaders=test_dataloader)
+
+model_path = 'litmodel.pt'
+torch.save(torch_model, model_path)
