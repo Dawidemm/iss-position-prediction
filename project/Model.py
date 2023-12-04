@@ -1,44 +1,20 @@
-import tensorflow as tf
-import pandas as pd
-from Preprocessing import PreprocessingTrainingDataset
-from Settings import SettingsModel
+import torch
+from torch import nn
+import lightning as pl
 
-def neural_network() -> tf.keras.models.Sequential:
+class myModel(nn.Module):
+    def __init__(self):
+        super().__init__()
 
-    model = tf.keras.models.Sequential()
-    model.add(tf.keras.layers.Dense(units=2))
-    model.add(tf.keras.layers.Dense(units=64))
-    model.add(tf.keras.layers.Dense(units=64))
-    model.add(tf.keras.layers.Dense(units=2))
+        layers = [nn.Linear(2, 10),
+                  nn.Linear(10, 10),
+                  nn.Linear(10, 2)]
+        
+        self.net = nn.Sequential(*layers)
+        
 
-    model.compile(
-        loss=tf.keras.losses.MeanSquaredError(),
-        optimizer=tf.keras.optimizers.Adam(SettingsModel.LEARNING_RATE),
-        metrics=['accuracy']
-    )
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return self.net(x)
 
-    return model
-
-def model_fit(dataset: pd.DataFrame) -> tf.keras.models.Sequential:
-
-    train_dataset, train_target = dataset.train()
-    val_dataset, val_target = dataset.val()
-
-    model = neural_network()
-
-    model.fit(train_dataset, train_target, 
-            epochs=SettingsModel.EPOCHS, 
-            validation_data=(val_dataset, val_target), 
-            callbacks=[SettingsModel.EARLY_STOPPING, SettingsModel.MODEL_CHECKPOINT, SettingsModel.HISTORY],
-            verbose=0
-    )
-    return model
-
-if __name__ == '__main__':
-
-    dataset = pd.read_csv('project/training_dataset.csv')
-    dataset = PreprocessingTrainingDataset(dataset=dataset)
-    dataset.set_target()
-    dataset.standard_scaled()
-
-    model = model_fit(dataset=dataset)
+model = myModel()
+print(list(model.parameters()))
