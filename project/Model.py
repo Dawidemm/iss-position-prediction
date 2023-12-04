@@ -28,10 +28,15 @@ class myLitModel(pl.LightningModule):
     def forward(self, x):
         return self.model(x)
     
-    def training_step(self, batch, batch_idx):
+    def _shared_step(self, batch, batch_idx):
         x, y = batch
         outputs = self(x)
         loss = self.criterion(outputs, y)
+
+        return loss, y, outputs
+    
+    def training_step(self, batch, batch_idx):
+        loss, y, outputs = self._shared_step(batch, batch_idx)
         self.log('train_loss', loss)
 
         self.train_metric = self.metric
@@ -41,9 +46,7 @@ class myLitModel(pl.LightningModule):
         return loss
 
     def validation_step(self, batch, batch_idx):
-        x, y = batch
-        outputs = self(x)
-        loss = self.criterion(outputs, y)
+        loss, y, outputs = self._shared_step(batch, batch_idx)
         self.log('val_loss', loss)
 
         self.val_metric = self.metric
@@ -53,13 +56,17 @@ class myLitModel(pl.LightningModule):
         return {"val_loss": loss}
 
     def test_step(self, batch, batch_idx):
-        x, y = batch
-        outputs = self(x)
-        loss = self.criterion(outputs, y)
+        loss, y, outputs = self._shared_step(batch, batch_idx)
+
+        self.test_metric = self.metric
+        self.test_metric(outputs, y)
+        self.log('test_mse', self.val_metric.compute())
+
         return {"test_loss": loss}
 
     def configure_optimizers(self):
         optimizer = torch.optim.Adam(self.parameters(), lr=0.001)
+
         return optimizer
     
 train_dataset_path = './train_dataset.csv'
@@ -77,9 +84,10 @@ test_dataloader = DataLoader(test_dataset, batch_size=256, shuffle=False)
 torch_model = myModel()
 lit_model = myLitModel(torch_model)
 
-trainer = pl.Trainer(max_epochs=50, accelerator='auto')
+trainer = pl.Trainer(max_epochs=10, accelerator='auto')
 trainer.fit(lit_model, train_dataloaders=train_dataloader, val_dataloaders=val_dataloader)
-trainer.test(dataloaders=test_dataloader)
+test_mse = trainer.test(dataloaders=test_dataloader)[0]
+print(test_mse)
 
 model_path = 'litmodel.pt'
 torch.save(torch_model, model_path)
