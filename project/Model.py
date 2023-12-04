@@ -3,6 +3,7 @@ from torch import nn
 import lightning as pl
 from Preprocessing import myDataset
 from torch.utils.data import DataLoader
+import torchmetrics
 
 class myModel(nn.Module):
     def __init__(self):
@@ -18,9 +19,10 @@ class myModel(nn.Module):
         return self.net(x)
     
 class myLitModel(pl.LightningModule):
-    def __init__(self, model):
+    def __init__(self, model, metric):
         super().__init__()
         self.model = model
+        self.metric = metric
         self.criterion = nn.MSELoss()
 
     def forward(self, x):
@@ -28,19 +30,31 @@ class myLitModel(pl.LightningModule):
     
     def training_step(self, batch, batch_idx):
         x, y = batch
-        outputs = self.model(x)
+        outputs = self(x)
         loss = self.criterion(outputs, y)
+        self.log('train_loss', loss)
+
+        self.train_metric = self.metric
+        self.train_metric(outputs, y)
+        self.log('train_acc', self.train_metric, prog_bar=True, on_epoch=True, on_step=False)
+
         return loss
 
     def validation_step(self, batch, batch_idx):
         x, y = batch
-        outputs = self.model(x)
+        outputs = self(x)
         loss = self.criterion(outputs, y)
+        self.log('val_loss', loss)
+
+        self.val_metric = self.metric
+        self.val_metric(outputs, y)
+        self.log('train_acc', self.val_metric, prog_bar=True, on_epoch=True, on_step=False)
+
         return {"val_loss": loss}
 
     def test_step(self, batch, batch_idx):
         x, y = batch
-        outputs = self.model(x)
+        outputs = self(x)
         loss = self.criterion(outputs, y)
         return {"test_loss": loss}
 
@@ -63,6 +77,6 @@ test_dataloader = DataLoader(test_dataset, batch_size=256, shuffle=False)
 torch_model = myModel()
 lit_model = myLitModel(torch_model)
 
-trainer = pl.Trainer(max_epochs=10)
+trainer = pl.Trainer(max_epochs=10, accelerator='auto')
 trainer.fit(lit_model, train_dataloaders=train_dataloader, val_dataloaders=val_dataloader)
 trainer.test(dataloaders=test_dataloader)
