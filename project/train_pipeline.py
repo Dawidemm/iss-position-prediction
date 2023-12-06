@@ -1,8 +1,8 @@
 import torch
 import lightning as pl
-from Preprocessing import myDataset
+from mydataset import myDataset
 from torch.utils.data import DataLoader
-from Model import myModel, myLitModel
+from model import myModel, myLitModel
 from lightning.pytorch.callbacks import EarlyStopping, ModelCheckpoint
 
 torch.manual_seed(100)
