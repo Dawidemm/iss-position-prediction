@@ -34,6 +34,7 @@ class FetchData():
 
     def __iter__(self):
         return self
+    
 class MakeDataset():
     '''
     Make a dataset from the data fetched from the API and save it as a csv file
