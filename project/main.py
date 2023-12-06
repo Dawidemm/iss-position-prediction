@@ -29,7 +29,7 @@ def main():
 
     torch_model = myModel()
     lit_model = myLitModel.load_from_checkpoint(
-        checkpoint_path='lightning_logs/version_0/checkpoints/epoch=23-step=1800.ckpt',
+        checkpoint_path='lightning_logs/version_0/checkpoints/epoch=23-step=2640.ckpt',
         map_location=torch.device('cpu'),
         model=torch_model)
     
