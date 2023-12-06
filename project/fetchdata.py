@@ -9,15 +9,13 @@ class SettingsMakeDataset:
 
     parameters:
     WHERE: str  # Where to save the dataset
-    DURATION: int  # How many data points to fetch
     URL: str  # The url of the API
     '''
-    DURATION: int = 25
     WHERE: str = 'dataset.csv'
     URL: str = 'http://api.open-notify.org/iss-now.json'
 
 class FetchData():
-    def __init__(self, duration: int = SettingsMakeDataset.DURATION, url: str = SettingsMakeDataset.URL) -> None:
+    def __init__(self, url: str = SettingsMakeDataset.URL) -> None:
         '''
         Fetch data from the API and return the longitude and latitude of the ISS
 
@@ -25,18 +23,15 @@ class FetchData():
         duration: int
         url: str
         '''
-        self.duration = duration
         self.url = url
 
     def __next__(self) -> tuple:
 
-        for _ in range(self.duration):
+        answer = requests.get(self.url)
+        answer = json.loads(answer.text)
+        position = answer['iss_position']
 
-            answer = requests.get(self.url)
-            answer = json.loads(answer.text)
-            position = answer['iss_position']
-
-            return position['longitude'], position['latitude']
+        return position['longitude'], position['latitude']
 
     def __iter__(self):
         return self
@@ -47,7 +42,7 @@ class MakeDataset():
     parameters:
     duration: int
     '''
-    def __init__(self, type: str, duration: int = SettingsMakeDataset.DURATION) -> None:
+    def __init__(self, type: str, duration: int) -> None:
         self.duration = duration
         self.type = type
 
@@ -55,7 +50,7 @@ class MakeDataset():
         trainig_dataset = open(f'{self.type}_{SettingsMakeDataset.WHERE}', 'w')
         trainig_dataset.write(f'longitude,latitude\n')
 
-        data_generator = FetchData(self.duration)
+        data_generator = FetchData()
         
         for _ in range(self.duration):
             position = next(data_generator)
