@@ -5,6 +5,7 @@ from torch.utils.data import Dataset, DataLoader
 class myDataset(Dataset):
     def __init__(self, csv_file,):
         self.data = pd.read_csv(csv_file, header=0)
+        self.data = self.data.drop_duplicates()
         # self.max_val = self.data.abs().max().max()
         self.max_val = 180
         self.num_samples = len(self.data)
