@@ -20,7 +20,6 @@ class FetchData():
         Fetch data from the API and return the longitude and latitude of the ISS
 
         parameters:
-        duration: int
         url: str
         '''
         self.url = url
