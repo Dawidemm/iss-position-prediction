@@ -36,9 +36,9 @@ def train_pipeline() -> None:
         None
     '''
 
-    train_dataloader = DataLoader(train_dataset, batch_size=256, shuffle=False)
-    val_dataloader = DataLoader(val_dataset, batch_size=256, shuffle=False)
-    test_dataloader = DataLoader(test_dataset, batch_size=256, shuffle=False)
+    train_dataloader = DataLoader(train_dataset, batch_size=128, shuffle=False)
+    val_dataloader = DataLoader(val_dataset, batch_size=128, shuffle=False)
+    test_dataloader = DataLoader(test_dataset, batch_size=128, shuffle=False)
 
     torch_model = myModel()
     lit_model = myLitModel(torch_model)
@@ -46,7 +46,7 @@ def train_pipeline() -> None:
     trainer = pl.Trainer(
         max_epochs=50, 
         accelerator='auto', 
-        callbacks=[EarlyStopping('val_loss', patience=2)], 
+        callbacks=[EarlyStopping('val_loss', patience=5)], 
         enable_checkpointing=True)
 
     trainer.fit(lit_model, train_dataloaders=train_dataloader, val_dataloaders=val_dataloader)
