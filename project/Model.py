@@ -1,9 +1,8 @@
 import torch
 from torch import nn
 import lightning as pl
-from Preprocessing import myDataset
-from torch.utils.data import DataLoader
 import torchmetrics
+
 
 class myModel(nn.Module):
     def __init__(self):
@@ -68,26 +67,3 @@ class myLitModel(pl.LightningModule):
         optimizer = torch.optim.Adam(self.parameters(), lr=0.001)
 
         return optimizer
-    
-train_dataset_path = './train_dataset.csv'
-val_dataset_path = './val_dataset.csv'
-test_dataset_path = './test_dataset.csv'
-
-train_dataset = myDataset(train_dataset_path)
-val_dataset = myDataset(val_dataset_path)
-test_dataset = myDataset(test_dataset_path)
-
-train_dataloader = DataLoader(train_dataset, batch_size=256, shuffle=False)
-val_dataloader = DataLoader(val_dataset, batch_size=256, shuffle=False)
-test_dataloader = DataLoader(test_dataset, batch_size=256, shuffle=False)
-
-torch_model = myModel()
-lit_model = myLitModel(torch_model)
-
-trainer = pl.Trainer(max_epochs=10, accelerator='auto')
-trainer.fit(lit_model, train_dataloaders=train_dataloader, val_dataloaders=val_dataloader)
-test_mse = trainer.test(dataloaders=test_dataloader)[0]
-print(test_mse)
-
-model_path = 'litmodel.pt'
-torch.save(torch_model, model_path)
