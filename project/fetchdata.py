@@ -1,6 +1,20 @@
 import json
 import requests
-from Settings import SettingsMakeDataset
+from dataclasses import dataclass
+
+@dataclass
+class SettingsMakeDataset:
+    '''
+    Settings for the MakeDataset class
+
+    parameters:
+    WHERE: str  # Where to save the dataset
+    DURATION: int  # How many data points to fetch
+    URL: str  # The url of the API
+    '''
+    DURATION: int = 25
+    WHERE: str = 'dataset.csv'
+    URL: str = 'http://api.open-notify.org/iss-now.json'
 
 class FetchData():
     def __init__(self, duration: int = SettingsMakeDataset.DURATION, url: str = SettingsMakeDataset.URL) -> None:
