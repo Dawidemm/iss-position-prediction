@@ -4,66 +4,116 @@ import pandas as pd
 import torch
 from torch.utils.data import DataLoader
 from mydataset import myDataset
-from torchvision.transforms import ToTensor
 from fetchdata import FetchData
 from model import myModel, myLitModel
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib.animation import FuncAnimation
 
-def draw_points_on_map(image, current_location, predicted_location):
-    # Przeskaluj współrzędne do zakresu -180 do 180
-    current_location_scaled = scale_coordinates(current_location)
-    predicted_location_scaled = scale_coordinates(predicted_location)
+EARTH_RADIUS = 6371
+ISS_ORBIT_RADIUS = 420
+animation_paused = False
 
-    # Narysuj punkty na mapie
-    cv2.circle(image, current_location_scaled, 5, (0, 255, 0), -1)  # Aktualna lokalizacja (kolor zielony)
-    cv2.circle(image, predicted_location_scaled, 5, (0, 0, 255), -1)  # Przewidziana lokalizacja (kolor czerwony)
+def polar_to_cartesian(lon, lat, radius):
+    lon_rad = np.radians(lon)
+    lat_rad = np.radians(lat)
+    x = radius * np.cos(lat_rad) * np.cos(lon_rad)
+    y = radius * np.cos(lat_rad) * np.sin(lon_rad)
+    z = radius * np.sin(lat_rad)
+    return x, y, z
 
-def scale_coordinates(coordinates):
-    # Przeskaluj współrzędne do zakresu -180 do 180
-    scaled_x = int(np.clip(coordinates[0], -180, 180))
-    scaled_y = int(np.clip(coordinates[1], -180, 180))
-    return scaled_x, scaled_y
+def draw_earth(ax):
+    phi, theta = np.mgrid[0.0:2.0*np.pi:100j, 0.0:np.pi:50j]
+    x = EARTH_RADIUS * np.sin(theta)*np.cos(phi)
+    y = EARTH_RADIUS * np.sin(theta)*np.sin(phi)
+    z = EARTH_RADIUS * np.cos(theta)
+    ax.plot_surface(x, y, z, color='green', alpha=0.2, linewidth=0)
+
+def draw_iss(ax, longitude, latitude):
+    x, y, z = polar_to_cartesian(longitude, latitude, EARTH_RADIUS + ISS_ORBIT_RADIUS)
+    ax.scatter(x, y, z, c='blue', marker='o', label='ISS')
+
+def draw_predictions(ax, preds):
+    global prediction_legend_added
+
+    for i in range(len(preds)):
+        longitude, latitude = preds[i].detach().numpy()
+        x, y, z = polar_to_cartesian(longitude, latitude, EARTH_RADIUS + ISS_ORBIT_RADIUS)
+        if i == 0:
+            ax.scatter(x, y, z, c='orange', marker='o', label='Predictions')
+        else:
+            ax.scatter(x, y, z, c='orange', marker='o')
+
+    if not prediction_legend_added:
+        ax.legend()
+        prediction_legend_added = True
+
+def update_plot(frame, model, ax, longitude, latitude, preds):
+    global animation_paused
+    ax.cla()
+
+    fetch_data = FetchData()
+    fetch_data = torch.tensor(list(map(float, next(fetch_data))), dtype=torch.float32)
+    net_input = fetch_data / 180
+
+    net_output = model(net_input)
+    pred = net_output * 180
+
+    lon = fetch_data[0].item()
+    lat = fetch_data[1].item()
+
+    if len(longitude) == 0 or (lon != longitude[-1] or lat != latitude[-1]):
+        longitude.append(lon)
+        latitude.append(lat)
+        preds.append(pred)
+
+    # x, y, z = polar_to_cartesian(longitude, latitude, EARTH_RADIUS+ISS_ORBIT_RADIUS)
+
+    draw_earth(ax)
+    draw_iss(ax, longitude, latitude)
+    draw_predictions(ax, preds)
+
+    ax.set_xticks([])
+    ax.set_yticks([])
+    ax.set_zticks([])
+
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_zlabel('Z')
+
+    if animation_paused:
+        ani.event_source.stop()
+    else:
+        ani.event_source.start()
+
+    ax.legend()
+
+def pause_animation(event):
+    global animation_paused
+    animation_paused = not animation_paused
 
 def main():
-
-    world_map = cv2.imread('project/world_map.jpg')
+    global ani, prediction_legend_added
 
     torch_model = myModel()
     lit_model = myLitModel.load_from_checkpoint(
         checkpoint_path='lightning_logs/version_0/checkpoints/epoch=23-step=2640.ckpt',
         map_location=torch.device('cpu'),
         model=torch_model)
-    
-    i = 0
-    while i < 10:
 
-        fetch_data = FetchData()
-        fetch_data = torch.tensor(list(map(float, next(fetch_data))), dtype=torch.float32)
-        net_input = fetch_data/180
+    longitude = []
+    latitude = []
+    preds = []
+    prediction_legend_added = False
 
-        net_output = lit_model(net_input)
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
 
-        preds = net_output * 180
+    ani = FuncAnimation(fig, update_plot, fargs=(lit_model, ax, longitude, latitude, preds), frames=100, interval=500)
 
-        print(fetch_data, preds)
+    fig.canvas.mpl_connect('key_press_event', pause_animation)
 
-        i += 1
-
-
-    # # Przewiduj lokalizację dla każdego batcha
-    # for batch in dataloader:
-    #     input_data = batch['input']
-    #     predicted_location = model(input_data)
-
-    #     # Pobierz aktualne położenie z FetchData
-    #     current_location = input_data.numpy()[0]
-
-    #     # Narysuj punkty na mapie
-    #     draw_points_on_map(world_map, current_location, predicted_location.detach().numpy()[0])
-
-    # # Wyświetl mapę
-    # cv2.imshow('World Map with Points', world_map)
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
+    plt.show()
 
 if __name__ == "__main__":
     main()
