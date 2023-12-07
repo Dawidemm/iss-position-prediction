@@ -9,6 +9,8 @@ from model import myModel, myLitModel
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.animation import FuncAnimation
+from torchmetrics import R2Score
+from sklearn.metrics import r2_score
 
 EARTH_RADIUS = 6371
 ISS_ORBIT_RADIUS = 420
@@ -40,7 +42,7 @@ def draw_predictions(ax, preds):
         longitude, latitude = preds[i].detach().numpy()
         x, y, z = polar_to_cartesian(longitude, latitude, EARTH_RADIUS + ISS_ORBIT_RADIUS)
         if i == 0:
-            ax.scatter(x, y, z, c='orange', marker='o', label='Predictions')
+            ax.scatter(x, y, z, c='orange', marker='o', label='Pred')
         else:
             ax.scatter(x, y, z, c='orange', marker='o')
 
@@ -48,8 +50,9 @@ def draw_predictions(ax, preds):
         ax.legend()
         prediction_legend_added = True
 
-def update_plot(frame, model, ax, longitude, latitude, preds):
+def update_plot(frame, model, ax, longitude, latitude, preds, r2_scores):
     global animation_paused
+    
     ax.cla()
 
     fetch_data = FetchData()
@@ -58,7 +61,7 @@ def update_plot(frame, model, ax, longitude, latitude, preds):
 
     net_output = model(net_input)
     pred = net_output * 180
-
+    
     lon = fetch_data[0].item()
     lat = fetch_data[1].item()
 
@@ -66,8 +69,6 @@ def update_plot(frame, model, ax, longitude, latitude, preds):
         longitude.append(lon)
         latitude.append(lat)
         preds.append(pred)
-
-    # x, y, z = polar_to_cartesian(longitude, latitude, EARTH_RADIUS+ISS_ORBIT_RADIUS)
 
     draw_earth(ax)
     draw_iss(ax, longitude, latitude)
@@ -85,6 +86,13 @@ def update_plot(frame, model, ax, longitude, latitude, preds):
         ani.event_source.stop()
     else:
         ani.event_source.start()
+
+    # r2 = R2Score(num_outputs=1, multioutput='uniform_average')
+    # r2 = r2(torch.tensor(preds), torch.tensor(x_true))
+    # r2_scores.append(r2)
+
+    # # Wyświetlanie R2 Score na wykresie
+    # ax.text2D(0.05, 0.95, f'R2 Score: {r2.item():.4f}', transform=ax.transAxes)
 
     ax.legend()
 
@@ -104,12 +112,13 @@ def main():
     longitude = []
     latitude = []
     preds = []
+    r2_scores = []
     prediction_legend_added = False
 
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
 
-    ani = FuncAnimation(fig, update_plot, fargs=(lit_model, ax, longitude, latitude, preds), frames=100, interval=500)
+    ani = FuncAnimation(fig, update_plot, fargs=(lit_model, ax, longitude, latitude, preds, r2_scores), frames=100, interval=500)
 
     fig.canvas.mpl_connect('key_press_event', pause_animation)
 
