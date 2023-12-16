@@ -2,15 +2,20 @@ import torch
 from torch import nn
 import lightning as pl
 import torchmetrics
+from dataclasses import dataclass
 
+@dataclass
+class DataStep:
+    step: int = 1
 
 class myModel(nn.Module):
     def __init__(self):
         super().__init__()
 
-        layers = [nn.Linear(2, 10),
-                  nn.Linear(10, 10),
-                  nn.Linear(10, 2)]
+        layers = [nn.Flatten(),
+                  nn.Linear(2 * DataStep.step, 16),
+                  nn.Linear(16, 16),
+                  nn.Linear(16, 2)]
         
         self.net = nn.Sequential(*layers)
         
