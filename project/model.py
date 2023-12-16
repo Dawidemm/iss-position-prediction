@@ -12,10 +12,9 @@ class myModel(nn.Module):
     def __init__(self):
         super().__init__()
 
-        layers = [nn.Flatten(),
-                  nn.Linear(2 * DataStep.step, 16),
-                  nn.Linear(16, 16),
-                  nn.Linear(16, 2)]
+        layers = [nn.Linear(2, 16 * DataStep.step),
+                  nn.Linear(16 * DataStep.step, 16 * DataStep.step),
+                  nn.Linear(16 * DataStep.step, 2)]
         
         self.net = nn.Sequential(*layers)
         
