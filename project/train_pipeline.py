@@ -2,18 +2,20 @@ import torch
 import lightning as pl
 from mydataset import myDataset
 from torch.utils.data import DataLoader
-from model import myModel, myLitModel
-from lightning.pytorch.callbacks import EarlyStopping, ModelCheckpoint
+from model import DataStep, myModel, myLitModel
+from lightning.pytorch.callbacks import EarlyStopping
 
-torch.manual_seed(100)
+torch.manual_seed(10)
     
 train_dataset_path = './train_dataset.csv'
 val_dataset_path = './val_dataset.csv'
 test_dataset_path = './test_dataset.csv'
 
-train_dataset = myDataset(train_dataset_path)
-val_dataset = myDataset(val_dataset_path)
-test_dataset = myDataset(test_dataset_path)
+DATA_STEP = DataStep.step
+
+train_dataset = myDataset(train_dataset_path, step=DATA_STEP)
+val_dataset = myDataset(val_dataset_path, step=DATA_STEP)
+test_dataset = myDataset(test_dataset_path, step=DATA_STEP)
 
 def train_pipeline() -> None:
 
@@ -52,7 +54,6 @@ def train_pipeline() -> None:
     trainer.fit(lit_model, train_dataloaders=train_dataloader, val_dataloaders=val_dataloader)
 
     test_mse = trainer.test(dataloaders=test_dataloader, ckpt_path='best')[0]
-    print(test_mse)
 
     model_path = 'litmodel.pt'
     torch.save(torch_model, model_path)
