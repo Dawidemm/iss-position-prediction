@@ -59,6 +59,9 @@ class MakeDataset():
         return None
 
 
-if __name__ == '__main__':
-    dataset = MakeDataset(type='test', duration=1800)
+def make_dataset(type: str, duration: int):
+    dataset = MakeDataset(type=type, duration=duration)
     dataset.save_as_csv()
+
+if __name__ == '__main__':
+    make_dataset(type='val', duration=10000)
