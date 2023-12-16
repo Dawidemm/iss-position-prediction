@@ -38,9 +38,9 @@ def train_pipeline() -> None:
         None
     '''
 
-    train_dataloader = DataLoader(train_dataset, batch_size=128, shuffle=False)
-    val_dataloader = DataLoader(val_dataset, batch_size=128, shuffle=False)
-    test_dataloader = DataLoader(test_dataset, batch_size=128, shuffle=False)
+    train_dataloader = DataLoader(train_dataset, batch_size=512, shuffle=False)
+    val_dataloader = DataLoader(val_dataset, batch_size=512, shuffle=False)
+    test_dataloader = DataLoader(test_dataset, batch_size=512, shuffle=False)
 
     torch_model = myModel()
     lit_model = myLitModel(torch_model)
