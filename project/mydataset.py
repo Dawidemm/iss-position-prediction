@@ -20,6 +20,7 @@ class myDataset(Dataset):
 
         current_row  = torch.tensor(current_row, dtype=torch.float32) /self.max_val
         target = torch.tensor(target, dtype=torch.float32) /self.max_val
+        target = torch.reshape(target, (1, 2))
         
         return current_row, target
     
