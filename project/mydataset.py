@@ -1,6 +1,7 @@
 import pandas as pd
 import torch
 from torch.utils.data import Dataset, DataLoader
+from lightning.pytorch import LightningDataModule
 
 class myDataset(Dataset):
     def __init__(self, csv_file: str, step: int):
@@ -23,6 +24,27 @@ class myDataset(Dataset):
         target = torch.reshape(target, (1, 2))
         
         return current_row, target
+    
+class myLitDataModule(LightningDataModule):
+    def __init__(self, train_csv: str, val_csv: str, test_csv, batch_size: int):
+        self.train_csv = train_csv
+        self.val_csv = val_csv
+        self.test_csv = test_csv
+        self.batch_size = batch_size
+
+    def setup(self, stage: str) -> None:
+        self.train_dataset = myDataset(csv_file=self.train_csv, step=1)
+        self.val_dataset = myDataset(csv_file=self.val_csv, step=1)
+        self.test_dataset = myDataset(csv_file=self.test_csv, step=1)
+
+    def train_dataloader(self) -> DataLoader:
+        return DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=False)
+    
+    def val_dataloader(self) -> DataLoader:
+        return DataLoader(self.val_dataset, batch_size=self.batch_size, shuffle=False)
+    
+    def test_dataloader(self) -> DataLoader:
+        return DataLoader(self.test_dataset, batch_size=self.batch_size, shuffle=False)  
     
 
 if __name__ == '__main__':
