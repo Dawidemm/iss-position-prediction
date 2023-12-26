@@ -1,7 +1,7 @@
 import pandas as pd
 import torch
 from torch.utils.data import Dataset, DataLoader
-from lightning.pytorch import LightningDataModule
+from lightning import LightningDataModule
 
 class myDataset(Dataset):
     def __init__(self, csv_file: str, step: int):
