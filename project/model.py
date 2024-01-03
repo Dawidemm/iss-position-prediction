@@ -22,7 +22,7 @@ class myModel(nn.Module):
         return self.net(x)
     
 class myLitModel(pl.LightningModule):
-    def __init__(self, model, metric=torchmetrics.MeanSquaredError()):
+    def __init__(self, model=myModel(), metric=torchmetrics.MeanSquaredError()):
         super().__init__()
         self.model = model
         self.metric = metric
