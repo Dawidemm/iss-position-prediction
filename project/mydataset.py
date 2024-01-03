@@ -27,6 +27,7 @@ class myDataset(Dataset):
     
 class myLitDataModule(LightningDataModule):
     def __init__(self, train_csv: str, val_csv: str, test_csv, batch_size: int):
+        super().__init__()
         self.train_csv = train_csv
         self.val_csv = val_csv
         self.test_csv = test_csv
@@ -44,18 +45,4 @@ class myLitDataModule(LightningDataModule):
         return DataLoader(self.val_dataset, batch_size=self.batch_size, shuffle=False)
     
     def test_dataloader(self) -> DataLoader:
-        return DataLoader(self.test_dataset, batch_size=self.batch_size, shuffle=False)  
-    
-
-if __name__ == '__main__':
-
-    train_dataset_path = './train_dataset.csv'
-    train_dataset = myDataset(train_dataset_path, step=1)
-    print(len(train_dataset.data))
-
-    train_dataloader = DataLoader(train_dataset, batch_size=128, shuffle=False)
-
-    X, y = next(iter(train_dataloader))
-
-    print(X.shape)
-    print(y.shape)
+        return DataLoader(self.test_dataset, batch_size=self.batch_size, shuffle=False)
