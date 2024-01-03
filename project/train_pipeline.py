@@ -37,8 +37,7 @@ def train_pipeline() -> None:
                                  test_csv=TEST_DATASET_PATH,
                                  batch_size=BATCH_SIZE)
 
-    torch_model = myModel()
-    lit_model = myLitModel(model=torch_model)
+    lit_model = myLitModel()
 
     trainer = pl.Trainer(
         max_epochs=50, 
@@ -49,9 +48,6 @@ def train_pipeline() -> None:
     trainer.fit(lit_model, datamodule=datamodule)
 
     test_mse = trainer.test(datamodule=datamodule, ckpt_path='best')[0]
-
-    model_path = 'litmodel.pt'
-    torch.save(torch_model, model_path)
 
     return None
 
