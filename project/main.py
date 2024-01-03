@@ -124,11 +124,9 @@ def update_plot(frame, model, ax, lon_lat, preds):
 def main():
     global ani
 
-    torch_model = myModel()
     lit_model = myLitModel.load_from_checkpoint(
         checkpoint_path='lightning_logs/version_0/checkpoints/epoch=16-step=1734.ckpt',
-        map_location=torch.device('cpu'),
-        model=torch_model)
+        map_location=torch.device('cpu'))
 
     lon_lat = []
     preds = []
