@@ -1,21 +1,15 @@
 import torch
 import lightning as pl
-from mydataset import myDataset
-from torch.utils.data import DataLoader
-from model import DataStep, myModel, myLitModel
+from mydataset import myLitDataModule
+from model import myModel, myLitModel
 from lightning.pytorch.callbacks import EarlyStopping
 
 torch.manual_seed(10)
     
-train_dataset_path = './train_dataset.csv'
-val_dataset_path = './val_dataset.csv'
-test_dataset_path = './test_dataset.csv'
-
-DATA_STEP = DataStep.step
-
-train_dataset = myDataset(train_dataset_path, step=DATA_STEP)
-val_dataset = myDataset(val_dataset_path, step=DATA_STEP)
-test_dataset = myDataset(test_dataset_path, step=DATA_STEP)
+TRAIN_DATASET_PATH = './train_dataset.csv'
+VAL_DATASET_PATH = './val_dataset.csv'
+TEST_DATASET_PATH = './test_dataset.csv'
+BATCH_SIZE = 512
 
 def train_pipeline() -> None:
 
@@ -38,12 +32,13 @@ def train_pipeline() -> None:
         None
     '''
 
-    train_dataloader = DataLoader(train_dataset, batch_size=512, shuffle=False)
-    val_dataloader = DataLoader(val_dataset, batch_size=512, shuffle=False)
-    test_dataloader = DataLoader(test_dataset, batch_size=512, shuffle=False)
+    datamodule = myLitDataModule(train_csv=TRAIN_DATASET_PATH,
+                                 val_csv=VAL_DATASET_PATH,
+                                 test_csv=TEST_DATASET_PATH,
+                                 batch_size=BATCH_SIZE)
 
     torch_model = myModel()
-    lit_model = myLitModel(torch_model)
+    lit_model = myLitModel(model=torch_model)
 
     trainer = pl.Trainer(
         max_epochs=50, 
@@ -51,9 +46,9 @@ def train_pipeline() -> None:
         callbacks=[EarlyStopping('val_loss', patience=5)], 
         enable_checkpointing=True)
 
-    trainer.fit(lit_model, train_dataloaders=train_dataloader, val_dataloaders=val_dataloader)
+    trainer.fit(lit_model, datamodule=datamodule)
 
-    test_mse = trainer.test(dataloaders=test_dataloader, ckpt_path='best')[0]
+    test_mse = trainer.test(datamodule=datamodule, ckpt_path='best')[0]
 
     model_path = 'litmodel.pt'
     torch.save(torch_model, model_path)
