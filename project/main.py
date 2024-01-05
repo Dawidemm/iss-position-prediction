@@ -134,7 +134,7 @@ def main():
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
 
-    ani = FuncAnimation(fig, update_plot, fargs=(lit_model, ax, lon_lat, preds), frames=100, interval=500)
+    ani = FuncAnimation(fig, update_plot, fargs=(lit_model, ax, lon_lat, preds), frames=100, interval=100)
 
     fig.canvas.mpl_connect('key_press_event', pause_animation)
 
