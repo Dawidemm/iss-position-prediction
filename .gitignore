@@ -1,4 +1,5 @@
 __pycache__
 ModelWeights.h5
 .DS_Store
-lightinig_logs
+/lightinig_logs
+litmodel.pt
