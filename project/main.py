@@ -125,7 +125,7 @@ def main():
     global ani
 
     lit_model = myLitModel.load_from_checkpoint(
-        checkpoint_path='lightning_logs/version_0/checkpoints/epoch=16-step=1734.ckpt',
+        checkpoint_path='project/saved_model.ckpt',
         map_location=torch.device('cpu'))
 
     lon_lat = []
