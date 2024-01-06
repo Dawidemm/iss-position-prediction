@@ -24,9 +24,8 @@ def train_pipeline() -> None:
        - `accelerator`: Auto-select accelerator device for training.
        - `callbacks`: Utilizes EarlyStopping callback to stop training if validation loss does not improve.
        - `enable_checkpointing`: Enables model checkpointing during training.
-    4. Fits the Lightning model to the training data using the provided data loaders.
+    4. Fits the Lightning model to the training data using the provided datamodule.
     5. Evaluates the trained model on the test data and prints the Mean Squared Error (MSE).
-    6. Saves the PyTorch model (`torch_model`) to a file ('litmodel.pt').
 
     Returns:
         None
