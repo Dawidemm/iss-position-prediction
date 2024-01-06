@@ -5,14 +5,17 @@ from dataclasses import dataclass
 @dataclass
 class SettingsMakeDataset:
     '''
-    Settings for the MakeDataset class
-
-    parameters:
-    WHERE: str  # Where to save the dataset
-    URL: str  # The url of the API
+    A dataclass for storing attributes related to dataset creation.
+    
+    Attributes:
+    - WHERE (str): The default path for saving datasets.
+    - URL (str): The default URL for fetching ISS position data.
     '''
-    WHERE: str = 'dataset.csv'
+    WHERE: str = ''
     URL: str = 'http://api.open-notify.org/iss-now.json'
+
+    def set_path(self, path):
+        self.WHERE = f'datasets/{path}_dataset.csv'
 
 class FetchData():
     '''
@@ -58,7 +61,10 @@ class MakeDataset():
         self.type = type
 
     def save_as_csv(self):
-        trainig_dataset = open(f'{self.type}_{SettingsMakeDataset.WHERE}', 'w')
+        settings = SettingsMakeDataset()
+        settings.set_path(self.type)
+
+        trainig_dataset = open(f'{settings.WHERE}', 'w')
         trainig_dataset.write(f'longitude,latitude\n')
 
         data_generator = FetchData()
@@ -73,4 +79,4 @@ def make_dataset(type: str, duration: int):
 
 
 if __name__ == '__main__':
-    make_dataset(type='val', duration=10000)
+    make_dataset(type='abc', duration=10)
