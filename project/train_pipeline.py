@@ -11,7 +11,7 @@ VAL_DATASET_PATH = 'datasets/val_dataset.csv'
 TEST_DATASET_PATH = 'datasets/test_dataset.csv'
 BATCH_SIZE = 512
 
-def train_pipeline() -> None:
+def train_pipeline():
 
     '''
     Train a PyTorch Lightning model using a custom training pipeline.
@@ -48,7 +48,6 @@ def train_pipeline() -> None:
 
     test_mse = trainer.test(datamodule=datamodule, ckpt_path='best')[0]
 
-    return None
 
 if __name__ == '__main__':
     train_pipeline()
