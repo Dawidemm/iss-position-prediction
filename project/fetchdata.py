@@ -8,9 +8,9 @@ class ApiKeyConfig:
     A dataclass for managing API key configurations.
 
     Attributes:
-    - ISS_URL (str): The default URL for fetching International Space Station (ISS) position data.
+    - URL (str): The default URL for fetching International Space Station (ISS) position data.
     '''
-    ISS_URL: str = 'http://api.open-notify.org/iss-now.json'
+    URL: str = 'http://api.open-notify.org/iss-now.json'
 
 class FetchData():
     '''
