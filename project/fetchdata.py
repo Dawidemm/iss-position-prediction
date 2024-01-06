@@ -15,17 +15,18 @@ class SettingsMakeDataset:
     URL: str = 'http://api.open-notify.org/iss-now.json'
 
 class FetchData():
+    '''
+    A class for fetching and providing real-time geographical coordinates of the International Space Station (ISS).
+
+    Args:
+    - url (str, optional): The URL for fetching ISS position data. Defaults to SettingsMakeDataset.URL.
+
+    Methods:
+    - __next__(): Fetches the next geographical coordinates of the ISS.
+    - __iter__(): Returns the iterator object.
+    '''
+
     def __init__(self, url: str = SettingsMakeDataset.URL) -> None:
-        '''
-        A class for fetching and providing real-time geographical coordinates of the International Space Station (ISS).
-
-        Args:
-        - url (str, optional): The URL for fetching ISS position data. Defaults to SettingsMakeDataset.URL.
-
-        Methods:
-        - __next__(): Fetches the next geographical coordinates of the ISS.
-        - __iter__(): Returns the iterator object.
-        '''
         self.url = url
 
     def __next__(self) -> tuple:
@@ -51,6 +52,7 @@ class MakeDataset():
     - save_as_csv(): Fetches geographical coordinates using a data generator and saves them
       as a CSV file named '{type}_{SettingsMakeDataset.WHERE}'.
     '''
+    
     def __init__(self, type: str, duration: int) -> None:
         self.duration = duration
         self.type = type
