@@ -26,7 +26,7 @@ class FetchData():
     - __iter__(): Returns the iterator object.
     '''
 
-    def __init__(self, url: str = SettingsMakeDataset.URL) -> None:
+    def __init__(self, url: str = SettingsMakeDataset.URL):
         self.url = url
 
     def __next__(self) -> tuple:
@@ -52,12 +52,12 @@ class MakeDataset():
     - save_as_csv(): Fetches geographical coordinates using a data generator and saves them
       as a CSV file named '{type}_{SettingsMakeDataset.WHERE}'.
     '''
-    
-    def __init__(self, type: str, duration: int) -> None:
+
+    def __init__(self, type: str, duration: int):
         self.duration = duration
         self.type = type
 
-    def save_as_csv(self) -> None:
+    def save_as_csv(self):
         trainig_dataset = open(f'{self.type}_{SettingsMakeDataset.WHERE}', 'w')
         trainig_dataset.write(f'longitude,latitude\n')
 
@@ -67,12 +67,10 @@ class MakeDataset():
             position = next(data_generator)
             trainig_dataset.write(f'{position[0]},{position[1]}\n')
 
-        return None
-
-
 def make_dataset(type: str, duration: int):
     dataset = MakeDataset(type=type, duration=duration)
     dataset.save_as_csv()
+
 
 if __name__ == '__main__':
     make_dataset(type='val', duration=10000)
