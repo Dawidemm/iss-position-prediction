@@ -17,10 +17,14 @@ class SettingsMakeDataset:
 class FetchData():
     def __init__(self, url: str = SettingsMakeDataset.URL) -> None:
         '''
-        Fetch data from the API and return the longitude and latitude of the ISS
+        A class for fetching and providing real-time geographical coordinates of the International Space Station (ISS).
 
-        parameters:
-        url: str
+        Args:
+        - url (str, optional): The URL for fetching ISS position data. Defaults to SettingsMakeDataset.URL.
+
+        Methods:
+        - __next__(): Fetches the next geographical coordinates of the ISS.
+        - __iter__(): Returns the iterator object.
         '''
         self.url = url
 
