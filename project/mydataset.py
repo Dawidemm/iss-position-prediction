@@ -3,7 +3,7 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 from lightning import LightningDataModule
 
-class myDataset(Dataset):
+class LatLongDataset(Dataset):
     def __init__(self, csv_file: str, step: int):
         self.data = pd.read_csv(csv_file, header=0)
         self.data = self.data.drop_duplicates()
@@ -25,7 +25,7 @@ class myDataset(Dataset):
         
         return current_row, target
     
-class myLitDataModule(LightningDataModule):
+class LightningLatLongDatamodule(LightningDataModule):
     def __init__(self, train_csv: str, val_csv: str, test_csv, batch_size: int):
         super().__init__()
         self.train_csv = train_csv
@@ -34,9 +34,9 @@ class myLitDataModule(LightningDataModule):
         self.batch_size = batch_size
 
     def setup(self, stage: str) -> None:
-        self.train_dataset = myDataset(csv_file=self.train_csv, step=1)
-        self.val_dataset = myDataset(csv_file=self.val_csv, step=1)
-        self.test_dataset = myDataset(csv_file=self.test_csv, step=1)
+        self.train_dataset = LatLongDataset(csv_file=self.train_csv, step=1)
+        self.val_dataset = LatLongDataset(csv_file=self.val_csv, step=1)
+        self.test_dataset = LatLongDataset(csv_file=self.test_csv, step=1)
 
     def train_dataloader(self) -> DataLoader:
         return DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=False)

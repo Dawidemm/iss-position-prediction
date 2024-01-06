@@ -8,7 +8,7 @@ from dataclasses import dataclass
 class DataStep:
     step: int = 1
 
-class myModel(nn.Module):
+class LatLongPredictor(nn.Module):
     def __init__(self):
         super().__init__()
 
@@ -21,8 +21,8 @@ class myModel(nn.Module):
     def forward(self, x: torch.Tensor):
         return self.net(x)
     
-class myLitModel(pl.LightningModule):
-    def __init__(self, model=myModel(), metric=torchmetrics.MeanSquaredError()):
+class LightningLatLongPredictor(pl.LightningModule):
+    def __init__(self, model=LatLongPredictor(), metric=torchmetrics.MeanSquaredError()):
         super().__init__()
         self.model = model
         self.metric = metric

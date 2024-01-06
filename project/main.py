@@ -1,7 +1,7 @@
 import torch
 import numpy as np
 from fetchdata import FetchData
-from model import DataStep, myLitModel
+from model import DataStep, LightningLatLongPredictor
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from torchmetrics import MeanAbsoluteError
@@ -124,7 +124,7 @@ def update_plot(frame, model, ax, lon_lat, preds):
 def main():
     global ani
 
-    lit_model = myLitModel.load_from_checkpoint(
+    lit_model = LightningLatLongPredictor.load_from_checkpoint(
         checkpoint_path='project/saved_model.ckpt',
         map_location=torch.device('cpu'))
 
