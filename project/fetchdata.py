@@ -10,6 +10,7 @@ class ApiKeyConfig:
     Attributes:
     - URL (str): The default URL for fetching International Space Station (ISS) position data.
     '''
+    
     URL: str = 'http://api.open-notify.org/iss-now.json'
 
 class FetchData():
