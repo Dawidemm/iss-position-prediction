@@ -1,7 +1,7 @@
 import torch
 import lightning as pl
 from mydataset import myLitDataModule
-from model import myModel, myLitModel
+from model import myLitModel
 from lightning.pytorch.callbacks import EarlyStopping
 
 torch.manual_seed(10)
@@ -26,9 +26,6 @@ def train_pipeline():
        - `enable_checkpointing`: Enables model checkpointing during training.
     4. Fits the Lightning model to the training data using the provided datamodule.
     5. Evaluates the trained model on the test data and prints the Mean Squared Error (MSE).
-
-    Returns:
-        None
     '''
 
     datamodule = myLitDataModule(train_csv=TRAIN_DATASET_PATH,
