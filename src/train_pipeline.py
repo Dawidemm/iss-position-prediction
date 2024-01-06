@@ -17,8 +17,8 @@ def train_pipeline():
     Train a PyTorch Lightning model using a custom training pipeline.
 
     This function performs the following steps:
-    1. Creates data loaders for training, validation, and testing datasets.
-    2. Initializes a PyTorch model (`myModel`) and wraps it with a Lightning model (`myLitModel`).
+    1. Creates datamodulefor with training, validation, and testing datasets.
+    2. Initializes Lightning model (`LightningLatLongPredictor`).
     3. Configures a PyTorch Lightning Trainer with specified parameters:
        - `max_epochs`: Maximum number of training epochs (50 in this case).
        - `accelerator`: Auto-select accelerator device for training.
