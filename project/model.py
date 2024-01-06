@@ -18,7 +18,7 @@ class myModel(nn.Module):
         
         self.net = nn.Sequential(*layers)
         
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def forward(self, x: torch.Tensor):
         return self.net(x)
     
 class myLitModel(pl.LightningModule):
@@ -28,7 +28,7 @@ class myLitModel(pl.LightningModule):
         self.metric = metric
         self.criterion = nn.MSELoss()
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor):
         return self.model(x)
     
     def _shared_step(self, batch, batch_idx):
