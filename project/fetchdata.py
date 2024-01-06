@@ -37,10 +37,15 @@ class FetchData():
     
 class MakeDataset():
     '''
-    Make a dataset from the data fetched from the API and save it as a csv file
+    A class for generating and saving training datasets with geographical coordinates.
 
-    parameters:
-    duration: int
+    Args:
+    - type (str): The typeof the dataset.
+    - duration (int): The duration, number of data points, to be generated and saved.
+
+    Methods:
+    - save_as_csv(): Fetches geographical coordinates using a data generator and saves them
+      as a CSV file named '{type}_{SettingsMakeDataset.WHERE}'.
     '''
     def __init__(self, type: str, duration: int) -> None:
         self.duration = duration
