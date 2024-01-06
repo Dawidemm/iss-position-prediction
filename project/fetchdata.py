@@ -3,33 +3,28 @@ import requests
 from dataclasses import dataclass
 
 @dataclass
-class SettingsMakeDataset:
+class ApiKeyConfig:
     '''
-    A dataclass for storing attributes related to dataset creation.
-    
-    Attributes:
-    - WHERE (str): The default path for saving datasets.
-    - URL (str): The default URL for fetching ISS position data.
-    '''
-    WHERE: str = ''
-    URL: str = 'http://api.open-notify.org/iss-now.json'
+    A dataclass for managing API key configurations.
 
-    def set_path(self, path):
-        self.WHERE = f'datasets/{path}_dataset.csv'
+    Attributes:
+    - ISS_URL (str): The default URL for fetching International Space Station (ISS) position data.
+    '''
+    ISS_URL: str = 'http://api.open-notify.org/iss-now.json'
 
 class FetchData():
     '''
     A class for fetching and providing real-time geographical coordinates of the International Space Station (ISS).
 
     Args:
-    - url (str, optional): The URL for fetching ISS position data. Defaults to SettingsMakeDataset.URL.
+    - url (str, optional): The URL for fetching ISS position data. Defaults to ApiKeyConfig.URL.
 
     Methods:
     - __next__(): Fetches the next geographical coordinates of the ISS.
     - __iter__(): Returns the iterator object.
     '''
 
-    def __init__(self, url: str = SettingsMakeDataset.URL):
+    def __init__(self, url: str = ApiKeyConfig.URL):
         self.url = url
 
     def __next__(self) -> tuple:
@@ -52,8 +47,7 @@ class MakeDataset():
     - duration (int): The duration, number of data points, to be generated and saved.
 
     Methods:
-    - save_as_csv(): Fetches geographical coordinates using a data generator and saves them
-      as a CSV file named '{type}_{SettingsMakeDataset.WHERE}'.
+    - save_as_csv(): Fetches geographical coordinates using a data generator and saves them as a csv file'.
     '''
 
     def __init__(self, type: str, duration: int):
@@ -61,10 +55,8 @@ class MakeDataset():
         self.type = type
 
     def save_as_csv(self):
-        settings = SettingsMakeDataset()
-        settings.set_path(self.type)
 
-        trainig_dataset = open(f'{settings.WHERE}', 'w')
+        trainig_dataset = open(f'datasets/{self.type}_dataset.csv', 'w')
         trainig_dataset.write(f'longitude,latitude\n')
 
         data_generator = FetchData()
