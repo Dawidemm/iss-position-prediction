@@ -6,9 +6,9 @@ from lightning.pytorch.callbacks import EarlyStopping
 
 torch.manual_seed(10)
     
-TRAIN_DATASET_PATH = './train_dataset.csv'
-VAL_DATASET_PATH = './val_dataset.csv'
-TEST_DATASET_PATH = './test_dataset.csv'
+TRAIN_DATASET_PATH = 'datasets/test_dataset.csv'
+VAL_DATASET_PATH = 'datasets/val_dataset.csv'
+TEST_DATASET_PATH = 'datasets/test_dataset.csv'
 BATCH_SIZE = 512
 
 def train_pipeline() -> None:
