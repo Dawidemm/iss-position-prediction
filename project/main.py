@@ -1,7 +1,7 @@
 import torch
 import numpy as np
 from fetchdata import FetchData
-from model import DataStep, myModel, myLitModel
+from model import DataStep, myLitModel
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from torchmetrics import MeanAbsoluteError
