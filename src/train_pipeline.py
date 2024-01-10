@@ -1,7 +1,7 @@
 import torch
 import lightning as pl
 from dataset_module import LightningLatLongDatamodule
-from model import LightningLatLongPredictor
+from predictor_module import LightningLatLongPredictor
 from lightning.pytorch.callbacks import EarlyStopping
 
 torch.manual_seed(10)
