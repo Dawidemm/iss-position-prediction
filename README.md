@@ -38,7 +38,7 @@ print("Current ISS Coordinates:", coordinates)
 ## dataset_module.py (modules folder)
 
 ### Description:
-The `dataset_module.py` module, located in the `modules` folder, provides a dataset class (`LatLongDataset`) and a PyTorch Lightning DataModule class (`LightningLatLongDatamodule`) for handling geolocation data.
+The `dataset_module.py` module, located in the `modules` folder, provides a dataset class (`LatLongDataset`) and a PyTorch Lightning DataModule class (`LightningLatLongDatamodule`) for handling geolocation data.```
 
 ### Classes:
 
