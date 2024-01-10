@@ -11,7 +11,7 @@ The `LatLongDataset` class, defined in the `dataset_module.py` file, serves as a
 
 #### `__init__(self, csv_file: str, step: int)`
 - `csv_file`: Path to the CSV file containing geolocation data.
-- `step`: Number of time steps between training data and target data.
+<!-- - `step`: Number of time steps between training data and target data. -->
 
 #### `__len__(self) -> int`
 Returns the number of available examples in the dataset.
@@ -33,7 +33,7 @@ The `LightningLatLongDatamodule` class, defined in the `dataset_module.py` file,
 - `batch_size`: Batch size used in the DataLoaders.
 
 #### `setup(self, stage: str) -> None`
-Initializes training, validation, and test datasets.
+Initializes training, validation, and test datasets. In this method, the `LatLongDataset` class is utilized for creating instances of training, validation, and test datasets.
 
 #### `train_dataloader(self) -> DataLoader`
 Returns a DataLoader for training data.
