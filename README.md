@@ -88,3 +88,55 @@ datamodule = LightningLatLongDatamodule(train_csv, val_csv, test_csv, batch_size
 
 # Access DataLoader for training data
 train_dataloader = datamodule.train_dataloader()
+
+## predictor_module.py (modules folder)
+
+### Description:
+The `predictor_module.py` module, located in the `modules` folder, defines a neural network (`LatLongPredictor`) for geolocation prediction and a PyTorch Lightning module (`LightningLatLongPredictor`) for training, validation, and testing of the model.
+
+### Classes:
+
+#### `DataStep`
+A dataclass for managing the step parameter in the model.
+
+##### Attributes:
+- `step` (int): The step parameter. Defaults to 1.
+
+#### `LatLongPredictor`
+A PyTorch Module class representing a neural network for geolocation prediction.
+
+##### Methods:
+- `__init__(self):` Initializes the network with three linear layers.
+- `forward(self, x: torch.Tensor) -> torch.Tensor:` Performs a forward pass through the network.
+
+#### `LightningLatLongPredictor`
+A PyTorch Lightning Module class for training, validation, and testing the `LatLongPredictor` model.
+
+##### Args:
+- `model` (LatLongPredictor, optional): An instance of the `LatLongPredictor` model.
+- `metric` (torchmetrics.Metric, optional): The metric used for evaluation during training.
+
+##### Methods:
+- `__init__(self, model=LatLongPredictor(), metric=torchmetrics.MeanSquaredError()):` Initializes the Lightning module with the specified model and metric.
+- `forward(self, x: torch.Tensor) -> torch.Tensor:` Performs a forward pass through the model.
+- `_shared_step(self, batch, batch_idx) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:` Shared step for training, validation, and testing. Computes loss and metrics.
+- `training_step(self, batch, batch_idx) -> torch.Tensor:` Training step. Computes and logs training loss and metric.
+- `validation_step(self, batch, batch_idx) -> Dict[str, torch.Tensor]:` Validation step. Computes and logs validation loss and metric.
+- `test_step(self, batch, batch_idx) -> Dict[str, torch.Tensor]:` Test step. Computes and logs test loss and metric.
+- `configure_optimizers(self) -> torch.optim.Optimizer:` Configures the optimizer. Returns an instance of the Adam optimizer.
+
+### Usage:
+To use this module, create an instance of `LightningLatLongPredictor` for model training and evaluation.
+
+Example:
+```python
+from predictor_module import LightningLatLongPredictor
+
+# Create an instance of LightningLatLongPredictor
+predictor = LightningLatLongPredictor()
+
+# Train the model using the provided training pipeline
+predictor.train_pipeline()
+
+# Evaluate the trained model on the test dataset
+predictor.test()
