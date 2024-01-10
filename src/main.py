@@ -125,7 +125,7 @@ def main():
     global ani
 
     lit_model = LightningLatLongPredictor.load_from_checkpoint(
-        checkpoint_path='project/saved_model.ckpt',
+        checkpoint_path='src/saved_model.ckpt',
         map_location=torch.device('cpu'))
 
     lon_lat = []
