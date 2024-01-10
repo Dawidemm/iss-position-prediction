@@ -1,43 +1,43 @@
 # iss-position-prediction
 
-## LatLongDataset
+## LatLongDataset (dataset_module.py)
 
-### Opis:
-Klasa `LatLongDataset` jest opakowaniem wokół danych geolokacyjnych, umożliwiającym ich łatwe przygotowanie do użycia w modelu. Dane są wczytywane z pliku CSV, a następnie przetwarzane w celu usunięcia duplikatów.
+### Description:
+The `LatLongDataset` class, defined in the `dataset_module.py` file, serves as a wrapper for geolocation data, facilitating its preparation for use in a model. Data is loaded from a CSV file and processed to remove duplicates.
 
-### Metody:
+### Methods:
 
 #### `__init__(self, csv_file: str, step: int)`
-- `csv_file`: Ścieżka do pliku CSV zawierającego dane geolokacyjne.
-- `step`: Liczba kroków czasowych między danymi trenującymi a danymi docelowymi.
+- `csv_file`: Path to the CSV file containing geolocation data.
+- `step`: Number of time steps between training data and target data.
 
 #### `__len__(self) -> int`
-Zwraca liczbę dostępnych przykładów w zestawie danych.
+Returns the number of available examples in the dataset.
 
 #### `__getitem__(self, index) -> Tuple[torch.Tensor, torch.Tensor]`
-Zwraca krotkę zawierającą dane trenujące i odpowiadające im dane docelowe. Dane są normalizowane i przekształcane w tensory PyTorch.
+Returns a tuple containing training data and its corresponding target data. The data is normalized and transformed into PyTorch tensors.
 
-## LightningLatLongDatamodule
+## LightningLatLongDatamodule (dataset_module.py)
 
-### Opis:
-Klasa `LightningLatLongDatamodule` dziedziczy po `LightningDataModule` i służy do łatwego przygotowania danych do treningu, walidacji i testów modelu.
+### Description:
+The `LightningLatLongDatamodule` class, defined in the `dataset_module.py` file, inherits from `LightningDataModule` and is used to easily prepare data for training, validation, and testing of a model.
 
-### Metody:
+### Methods:
 
 #### `__init__(self, train_csv: str, val_csv: str, test_csv: str, batch_size: int)`
-- `train_csv`: Ścieżka do pliku CSV z danymi treningowymi.
-- `val_csv`: Ścieżka do pliku CSV z danymi walidacyjnymi.
-- `test_csv`: Ścieżka do pliku CSV z danymi testowymi.
-- `batch_size`: Rozmiar batcha używanego w DataLoaderach.
+- `train_csv`: Path to the CSV file with training data.
+- `val_csv`: Path to the CSV file with validation data.
+- `test_csv`: Path to the CSV file with test data.
+- `batch_size`: Batch size used in the DataLoaders.
 
 #### `setup(self, stage: str) -> None`
-Inicjalizuje zestawy danych treningowych, walidacyjnych i testowych.
+Initializes training, validation, and test datasets.
 
 #### `train_dataloader(self) -> DataLoader`
-Zwraca DataLoader dla danych treningowych.
+Returns a DataLoader for training data.
 
 #### `val_dataloader(self) -> DataLoader`
-Zwraca DataLoader dla danych walidacyjnych.
+Returns a DataLoader for validation data.
 
 #### `test_dataloader(self) -> DataLoader`
-Zwraca DataLoader dla danych testowych.
+Returns a DataLoader for test data.
