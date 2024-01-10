@@ -40,4 +40,4 @@ def draw_points(ax, data, label):
         elif i < (len(data)-1):
             ax.scatter(x, y, z, c=color, marker='o')
         else:
-            ax.scatter(x, y, z, c=color_last, marker='o', label=f'Last {label}')
+            ax.scatter(x, y, z, c=color_last, marker='x')
