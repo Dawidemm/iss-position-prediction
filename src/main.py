@@ -1,6 +1,6 @@
 import torch
 from iss_data_fetcher import FetchData
-from model import DataStep, LightningLatLongPredictor
+from predictor_module import DataStep, LightningLatLongPredictor
 from utils import draw_earth, draw_points
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
