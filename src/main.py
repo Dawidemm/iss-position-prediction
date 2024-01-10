@@ -1,5 +1,5 @@
 import torch
-from fetchdata import FetchData
+from iss_data_fetcher import FetchData
 from model import DataStep, LightningLatLongPredictor
 from utils import draw_earth, draw_points
 import matplotlib.pyplot as plt
