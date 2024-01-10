@@ -1,7 +1,7 @@
 import torch
-from iss_data_fetcher import FetchData
-from predictor_module import DataStep, LightningLatLongPredictor
-from utils import draw_earth, draw_points
+from modules.iss_data_fetcher import FetchData
+from modules.predictor_module import DataStep, LightningLatLongPredictor
+from modules.utils import draw_earth, draw_points
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from torchmetrics import MeanAbsoluteError

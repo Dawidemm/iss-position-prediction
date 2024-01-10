@@ -1,4 +1,4 @@
-from iss_data_fetcher import FetchData
+from modules.iss_data_fetcher import FetchData
 
 class MakeDataset():
     '''
