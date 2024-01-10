@@ -81,3 +81,34 @@ Test step. Computes and logs test loss and metric.
 
 #### `configure_optimizers(self) -> torch.optim.Optimizer`
 Configures the optimizer. Returns an instance of the Adam optimizer.
+
+## Training Pipeline (train_pipeline.py)
+
+### Description:
+The `train_pipeline.py` script defines a custom training pipeline for a PyTorch Lightning model. The pipeline includes the following steps:
+
+1. **Data Preparation:**
+   - Creates a `LightningLatLongDatamodule` with training, validation, and testing datasets loaded from CSV files (`datasets/test_dataset.csv`, `datasets/val_dataset.csv`, `datasets/test_dataset.csv`).
+   
+2. **Model Initialization:**
+   - Initializes a `LightningLatLongPredictor` model for geolocation prediction.
+
+3. **Trainer Configuration:**
+   - Configures a PyTorch Lightning Trainer with the following parameters:
+      - `max_epochs`: Maximum number of training epochs (50 in this case).
+      - `accelerator`: Auto-selects accelerator device for training.
+      - `callbacks`: Utilizes EarlyStopping callback to stop training if validation loss does not improve.
+      - `enable_checkpointing`: Enables model checkpointing during training.
+
+4. **Model Training:**
+   - Fits the Lightning model to the training data using the provided datamodule.
+
+5. **Model Evaluation:**
+   - Evaluates the trained model on the test data.
+   - Prints the Mean Squared Error (MSE) as the evaluation metric.
+
+### Usage:
+To execute the training pipeline, run the script with the following command:
+
+```bash
+python train_pipeline.py
