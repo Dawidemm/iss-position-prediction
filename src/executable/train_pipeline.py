@@ -2,7 +2,7 @@ import torch
 import lightning as pl
 from modules.dataset_module import LightningLatLongDatamodule
 from modules.predictor_module import LightningLatLongPredictor
-from lightning.pytorch.callbacks import EarlyStopping
+from lightning.pytorch.callbacks import EarlyStopping, ModelCheckpoint
 
 torch.manual_seed(10)
     
@@ -28,18 +28,26 @@ def train_pipeline():
     5. Evaluates the trained model on the test data and prints the Mean Squared Error (MSE).
     '''
 
-    datamodule = LightningLatLongDatamodule(train_csv=TRAIN_DATASET_PATH, 
+    datamodule = LightningLatLongDatamodule(train_csv=TRAIN_DATASET_PATH,
                                             val_csv=VAL_DATASET_PATH, 
                                             test_csv=TEST_DATASET_PATH, 
                                             batch_size=BATCH_SIZE)
 
     lit_model = LightningLatLongPredictor()
 
+    early_stopping = EarlyStopping(monitor='val_loss', 
+                                   patience=5)
+    
+    checkpoint_callback = ModelCheckpoint(save_top_k=1,
+                                          monitor='val_loss',
+                                          mode='min',
+                                          dirpath='src/checkpoints/',
+                                          filename="{epoch:02d}-{val_loss:.2f}")
+
     trainer = pl.Trainer(
         max_epochs=50, 
         accelerator='auto', 
-        callbacks=[EarlyStopping('val_loss', patience=5)], 
-        enable_checkpointing=True)
+        callbacks=[early_stopping, checkpoint_callback])
 
     trainer.fit(lit_model, datamodule=datamodule)
 
