@@ -1,6 +1,8 @@
 # iss-position-prediction
 
-## LatLongDataset (dataset_module.py)
+## dataset_module.py
+
+### LatLongDataset
 
 ### Description:
 The `LatLongDataset` class, defined in the `dataset_module.py` file, serves as a wrapper for geolocation data, facilitating its preparation for use in a model. Data is loaded from a CSV file and processed to remove duplicates.
@@ -17,7 +19,7 @@ Returns the number of available examples in the dataset.
 #### `__getitem__(self, index) -> Tuple[torch.Tensor, torch.Tensor]`
 Returns a tuple containing training data and its corresponding target data. The data is normalized and transformed into PyTorch tensors.
 
-## LightningLatLongDatamodule (dataset_module.py)
+### LightningLatLongDatamodule
 
 ### Description:
 The `LightningLatLongDatamodule` class, defined in the `dataset_module.py` file, inherits from `LightningDataModule` and is used to easily prepare data for training, validation, and testing of a model.
