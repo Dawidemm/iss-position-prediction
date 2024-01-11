@@ -44,7 +44,7 @@ def train_pipeline():
                                           monitor='val_loss',
                                           mode='min',
                                           dirpath='src/checkpoints/',
-                                          filename="{epoch:02d}-{val_loss:.2f}")
+                                          filename="{epoch:02d}-{val_loss:.4f}")
 
     trainer = pl.Trainer(
         max_epochs=MAX_EPOCHS, 
