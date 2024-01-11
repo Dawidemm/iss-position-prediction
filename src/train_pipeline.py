@@ -11,6 +11,7 @@ TRAIN_DATASET_PATH = 'datasets/test_dataset.csv'
 VAL_DATASET_PATH = 'datasets/val_dataset.csv'
 TEST_DATASET_PATH = 'datasets/test_dataset.csv'
 BATCH_SIZE = 512
+MAX_EPOCHS = 25
 
 def train_pipeline():
 
@@ -37,7 +38,7 @@ def train_pipeline():
     lit_model = LightningLatLongPredictor()
 
     early_stopping = EarlyStopping(monitor='val_loss', 
-                                   patience=5)
+                                   patience=3)
     
     checkpoint_callback = ModelCheckpoint(save_top_k=1,
                                           monitor='val_loss',
@@ -46,7 +47,7 @@ def train_pipeline():
                                           filename="{epoch:02d}-{val_loss:.2f}")
 
     trainer = pl.Trainer(
-        max_epochs=50, 
+        max_epochs=MAX_EPOCHS, 
         accelerator='auto', 
         callbacks=[early_stopping, checkpoint_callback])
 
