@@ -37,7 +37,9 @@ def train_pipeline():
 
     lit_model = LightningLatLongPredictor()
 
-    early_stopping = EarlyStopping(monitor='val_loss', 
+    early_stopping = EarlyStopping(monitor='val_loss',
+                                   mode='min',
+                                   min_delta=0.01,
                                    patience=3)
     
     checkpoint_callback = ModelCheckpoint(save_top_k=1,
