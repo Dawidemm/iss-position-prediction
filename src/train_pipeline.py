@@ -49,7 +49,8 @@ def train_pipeline():
     trainer = pl.Trainer(
         max_epochs=MAX_EPOCHS, 
         accelerator='auto', 
-        callbacks=[early_stopping, checkpoint_callback])
+        callbacks=[early_stopping, checkpoint_callback],
+        logger=False)
 
     trainer.fit(lit_model, datamodule=datamodule)
 
