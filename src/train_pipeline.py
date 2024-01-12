@@ -4,7 +4,7 @@ from lightning.pytorch.callbacks import EarlyStopping, ModelCheckpoint
 
 from modules.dataset_module import LightningLatLongDatamodule
 from modules.predictor_module import LightningLatLongPredictor
-from modules.utils import check_model_version
+from modules.utils import get_model_version
 
 torch.manual_seed(10)
     
@@ -49,7 +49,7 @@ def train_pipeline():
                                           monitor='val_loss',
                                           mode='min',
                                           dirpath='src/checkpoints/',
-                                          filename=f'model=v{check_model_version()}' + '-{epoch:02d}-{val_loss:.4e}' + f'-batch_size={BATCH_SIZE}')
+                                          filename=f'model=v{get_model_version()}' + '-{epoch:02d}-{val_loss:.4e}' + f'-batch_size={BATCH_SIZE}')
 
     trainer = pl.Trainer(
         max_epochs=MAX_EPOCHS, 
