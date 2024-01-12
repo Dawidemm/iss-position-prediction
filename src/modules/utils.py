@@ -131,16 +131,21 @@ def get_model_version(checkpoints_dir='src/checkpoints'):
 
         return f'{len(models)}'
     
-def get_model_checkpoint_path(checkpoints_dir='src/checkpoints'):
+def get_model_checkpoint_path(checkpoints_dir='src/checkpoints', selection=None):
     '''
-    Get the path to the last version of the model from the specified directory.
+    Get the path to the selected version of the model from the specified directory.
 
     Parameters:
     - checkpoints_dir (str): Directory containing model checkpoints.
+    - selection (str): Specify 'first' to get the path to the first checkpoint,
+                      or 'last' to get the path to the last checkpoint.
 
     Returns:
-    - model_path (str): Path to the last model checkpoint.
+    - model_path (str): Path to the selected model checkpoint.
     '''
+
+    if selection not in ['first', 'last']:
+        raise ValueError("Invalid value for 'selection'. Use 'first' or 'last'.")
 
     if not os.path.exists(checkpoints_dir):
         raise FileNotFoundError(f"Directory not found: {checkpoints_dir}")
@@ -149,13 +154,16 @@ def get_model_checkpoint_path(checkpoints_dir='src/checkpoints'):
 
     checkpoint_files = [file for file in files if file.endswith('.ckpt')]
 
-    checkpoint_files.sort()
-
     if not checkpoint_files:
         raise FileNotFoundError(f"No model checkpoints found in directory: {checkpoints_dir}")
 
-    last_checkpoint = checkpoint_files[-1]
+    checkpoint_files.sort(key=lambda x: os.path.getmtime(os.path.join(checkpoints_dir, x)), reverse=True)
 
-    last_checkpoint_path = os.path.join(checkpoints_dir, last_checkpoint)
+    if selection == 'first':
+        selected_checkpoint = checkpoint_files[0]
+    elif selection == 'last':
+        selected_checkpoint = checkpoint_files[-1]
 
-    return last_checkpoint_path
+    selected_checkpoint_path = os.path.join(checkpoints_dir, selected_checkpoint)
+
+    return selected_checkpoint_path
