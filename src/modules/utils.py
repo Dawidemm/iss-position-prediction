@@ -119,3 +119,32 @@ def check_model_version(checkpoints_dir='src/checkpoints'):
         models = os.listdir(checkpoints_dir)
 
         return f'{len(models)}'
+    
+def get_last_model_version(checkpoints_dir='src/checkpoints'):
+    '''
+    Get the path to the last version of the model from the specified directory.
+
+    Parameters:
+    - checkpoints_dir (str): Directory containing model checkpoints.
+
+    Returns:
+    - model_path (str): Path to the last model checkpoint.
+    '''
+
+    if not os.path.exists(checkpoints_dir):
+        raise FileNotFoundError(f"Directory not found: {checkpoints_dir}")
+
+    files = os.listdir(checkpoints_dir)
+
+    checkpoint_files = [file for file in files if file.endswith('.ckpt')]
+
+    checkpoint_files.sort()
+
+    if not checkpoint_files:
+        raise FileNotFoundError(f"No model checkpoints found in directory: {checkpoints_dir}")
+
+    last_checkpoint = checkpoint_files[-1]
+
+    last_checkpoint_path = os.path.join(checkpoints_dir, last_checkpoint)
+
+    return last_checkpoint_path
