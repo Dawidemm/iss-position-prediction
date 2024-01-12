@@ -131,7 +131,7 @@ def get_model_version(checkpoints_dir='src/checkpoints'):
 
         return f'{len(models)}'
     
-def get_last_model_version(checkpoints_dir='src/checkpoints'):
+def get_last_model_version_path(checkpoints_dir='src/checkpoints'):
     '''
     Get the path to the last version of the model from the specified directory.
 
