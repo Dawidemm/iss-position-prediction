@@ -157,7 +157,7 @@ def get_model_checkpoint_path(checkpoints_dir='src/checkpoints', selection=None)
     if not checkpoint_files:
         raise FileNotFoundError(f"No model checkpoints found in directory: {checkpoints_dir}")
 
-    checkpoint_files.sort(key=lambda x: os.path.getmtime(os.path.join(checkpoints_dir, x)), reverse=True)
+    checkpoint_files.sort(key=lambda x: os.path.getmtime(os.path.join(checkpoints_dir, x)), reverse=False)
 
     if selection == 'first':
         selected_checkpoint = checkpoint_files[0]
