@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -108,3 +109,13 @@ def draw_points(ax, data, label, earth_radius=EARTH_RADIUS, iss_orbit_radius=ISS
             ax.scatter(x, y, z, c=color, marker='o')
         else:
             ax.scatter(x, y, z, c=color_last, marker='x')
+
+def check_model_version(checkpoints_dir='src/checkpoints'):
+
+    if not os.path.exists(checkpoints_dir):
+        return f'0'
+    
+    else:
+        models = os.listdir(checkpoints_dir)
+
+        return f'{len(models)}'
