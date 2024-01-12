@@ -1,7 +1,7 @@
 import torch
 from modules.iss_data_fetcher import FetchData
 from modules.predictor_module import DataStep, LightningLatLongPredictor
-from modules.utils import draw_earth, draw_points
+from modules.utils import draw_earth, draw_points, get_last_model_version_path
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from torchmetrics import MeanAbsoluteError
@@ -85,7 +85,7 @@ def main():
     global ani
 
     lit_model = LightningLatLongPredictor.load_from_checkpoint(
-        checkpoint_path='src/checkpoints/model=v7-epoch=18-val_loss=5.4340e-04-batch_size=128.ckpt',
+        checkpoint_path=get_last_model_version_path(),
         map_location=torch.device('cpu'))
 
     lon_lat = []
