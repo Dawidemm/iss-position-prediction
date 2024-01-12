@@ -4,14 +4,15 @@ from lightning.pytorch.callbacks import EarlyStopping, ModelCheckpoint
 
 from modules.dataset_module import LightningLatLongDatamodule
 from modules.predictor_module import LightningLatLongPredictor
+from modules.utils import check_model_version
 
 torch.manual_seed(10)
     
 TRAIN_DATASET_PATH = 'datasets/test_dataset.csv'
 VAL_DATASET_PATH = 'datasets/val_dataset.csv'
 TEST_DATASET_PATH = 'datasets/test_dataset.csv'
-BATCH_SIZE = 512
-MAX_EPOCHS = 25
+BATCH_SIZE = 128
+MAX_EPOCHS = 50
 
 def train_pipeline():
 
@@ -34,19 +35,21 @@ def train_pipeline():
                                             val_csv=VAL_DATASET_PATH, 
                                             test_csv=TEST_DATASET_PATH, 
                                             batch_size=BATCH_SIZE)
+    
+    datamodule.setup(stage='train')
 
     lit_model = LightningLatLongPredictor()
 
     early_stopping = EarlyStopping(monitor='val_loss',
                                    mode='min',
-                                   min_delta=0.01,
-                                   patience=3)
+                                   min_delta=0.001,
+                                   patience=5)
     
     checkpoint_callback = ModelCheckpoint(save_top_k=1,
                                           monitor='val_loss',
                                           mode='min',
                                           dirpath='src/checkpoints/',
-                                          filename="{epoch:02d}-{val_loss:.4f}")
+                                          filename=f'model=v{check_model_version()}' + '-{epoch:02d}-{val_loss:.4e}' + f'-batch_size={BATCH_SIZE}')
 
     trainer = pl.Trainer(
         max_epochs=MAX_EPOCHS, 
@@ -55,6 +58,8 @@ def train_pipeline():
         logger=False)
 
     trainer.fit(lit_model, datamodule=datamodule)
+
+    datamodule.setup(stage='test')
 
     test_mse = trainer.test(datamodule=datamodule, ckpt_path='best')[0]
 
