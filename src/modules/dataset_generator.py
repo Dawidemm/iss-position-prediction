@@ -1,6 +1,6 @@
 from modules.iss_data_fetcher import FetchData
 
-class MakeDataset():
+class GenerateDataset():
     '''
     A class for generating and saving training datasets with geographical coordinates.
 
