@@ -1,53 +1,13 @@
 import torch
-import numpy as np
-from fetchdata import FetchData
-from model import DataStep, myModel, myLitModel
+from modules.iss_data_fetcher import FetchData
+from modules.predictor_module import DataStep, LightningLatLongPredictor
+from modules.utils import draw_earth, draw_points, get_model_checkpoint_path
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from torchmetrics import MeanAbsoluteError
 
 DATA_STEP = DataStep.step
-EARTH_RADIUS = 6371
-ISS_ORBIT_RADIUS = 420
 animation_paused = False
-
-def polar_to_cartesian(lon, lat, radius):
-    lon_rad = np.radians(lon)
-    lat_rad = np.radians(lat)
-    x = radius * np.cos(lat_rad) * np.cos(lon_rad)
-    y = radius * np.cos(lat_rad) * np.sin(lon_rad)
-    z = radius * np.sin(lat_rad)
-    return x, y, z
-
-def draw_earth(ax):
-    phi, theta = np.mgrid[0.0:2.0*np.pi:100j, 0.0:np.pi:50j]
-    x = EARTH_RADIUS * np.sin(theta)*np.cos(phi)
-    y = EARTH_RADIUS * np.sin(theta)*np.sin(phi)
-    z = EARTH_RADIUS * np.cos(theta)
-    ax.plot_surface(x, y, z, color='green', alpha=0.2, linewidth=0)
-
-def draw_points(ax, data, label):
-
-    if label == 'Pred':
-        color = 'red'
-        color_last = 'orange'
-    elif label == 'True':
-        color = 'blue'
-        color_last = 'cyan'
-    else:
-        raise ValueError(f'Pick one from ["Preds", "True"].')
-
-    for i in range(len(data)):
-
-        longitude, latitude = data[i].detach().numpy()
-        x, y, z = polar_to_cartesian(longitude, latitude, EARTH_RADIUS + ISS_ORBIT_RADIUS)
-
-        if i == 0:
-            ax.scatter(x, y, z, c=color, marker='o', label=label)
-        elif i < (len(data)-1):
-            ax.scatter(x, y, z, c=color, marker='o')
-        else:
-            ax.scatter(x, y, z, c=color_last, marker='o', label=f'Last {label}')
 
 def pause_animation(event):
     global animation_paused
@@ -124,11 +84,9 @@ def update_plot(frame, model, ax, lon_lat, preds):
 def main():
     global ani
 
-    torch_model = myModel()
-    lit_model = myLitModel.load_from_checkpoint(
-        checkpoint_path='lightning_logs/version_0/checkpoints/epoch=16-step=1734.ckpt',
-        map_location=torch.device('cpu'),
-        model=torch_model)
+    lit_model = LightningLatLongPredictor.load_from_checkpoint(
+        checkpoint_path=get_model_checkpoint_path(selection='first'),
+        map_location=torch.device('cpu'))
 
     lon_lat = []
     preds = []
@@ -136,7 +94,7 @@ def main():
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
 
-    ani = FuncAnimation(fig, update_plot, fargs=(lit_model, ax, lon_lat, preds), frames=100, interval=500)
+    ani = FuncAnimation(fig, update_plot, fargs=(lit_model, ax, lon_lat, preds), frames=100, interval=100)
 
     fig.canvas.mpl_connect('key_press_event', pause_animation)
 
