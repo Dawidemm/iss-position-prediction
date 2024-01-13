@@ -20,13 +20,14 @@ def train_pipeline():
     Train a PyTorch Lightning model using a custom training pipeline.
 
     This function performs the following steps:
-    1. Creates datamodulefor with training, validation, and testing datasets.
-    2. Initializes Lightning model (`LightningLatLongPredictor`).
-    3. Configures a PyTorch Lightning Trainer with specified parameters:
+    1. Creates a datamodule with training, validation, and testing datasets.
+    2. Initializes a Lightning model (`LightningLatLongPredictor`).
+    3. Configures a PyTorch Lightning Trainer with the following parameters:
        - `max_epochs`: Maximum number of training epochs (50 in this case).
-       - `accelerator`: Auto-select accelerator device for training.
-       - `callbacks`: Utilizes EarlyStopping callback to stop training if validation loss does not improve.
-       - `enable_checkpointing`: Enables model checkpointing during training.
+       - `accelerator`: The accelerator is set to 'auto', allowing PyTorch Lightning to automatically choose the appropriate accelerator device based on the available hardware (CPU or GPU).
+       - `callbacks`: Utilizes EarlyStopping callback to monitor the 'val_loss' and stop training if it does not improve within a patience of 5 epochs. Additionally, it uses the ModelCheckpoint callback to save the best model based on the 'val_loss' during training.
+       - `logger`: The logger is set to False, indicating that no logging will be performed during training.
+
     4. Fits the Lightning model to the training data using the provided datamodule.
     5. Evaluates the trained model on the test data and prints the Mean Squared Error (MSE).
     '''
