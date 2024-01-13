@@ -2,7 +2,9 @@
 
 The goal of the project is to develop a system for predicting the position of the International Space Station (ISS) in geographical coordinate space. To achieve this goal, a set of tools and scripts has been prepared to collect data, train the model and visualize the actual and predicted position of the ISS.
 
-### generate_dataset.py
+## Description of executables:
+
+### - generate_dataset.py
 
 This script utilizes the `GenerateDataset` class from the `modules.dataset_generator` module to generate datasets for training, validation, and testing.
 
@@ -27,9 +29,9 @@ The script generates three datasets with different types and durations:
 2. Validation dataset: `generate_dataset(type='new_val', duration=200)`
 3. Testing dataset: `generate_dataset(type='new_test', duration=100)`
 
-The datasets are saved as CSV files using the `save_as_csv` method of the `GenerateDataset` class.
+Datasets are saved as CSV files using the `save_as_csv` method of the `GenerateDataset` class.
 
-### train_pipeline.py
+### - train_pipeline.py
 
 This script defines a PyTorch Lightning training pipeline for a machine learning model using the `LightningLatLongPredictor` model, `LightningLatLongDatamodule` data module, and various PyTorch Lightning functionalities.
 
@@ -61,7 +63,7 @@ The `train_pipeline` function performs the following steps:
 
 Note: Users can modify the paths to CSV files (`TRAIN_DATASET_PATH`, `VAL_DATASET_PATH`, `TEST_DATASET_PATH`) in the script to point to their generated datasets.
 
-### main.py
+### - main.py
 
 This script provides a real-time visualization of the predictions made by the trained model (`LightningLatLongPredictor`) on longitude and latitude coordinates. The visualization includes both true and predicted points in a 3D plot.
 
@@ -93,3 +95,5 @@ The `main.py` script does the following:
 5. Allows pausing and resuming the animation by pressing any key.
 
 Note: Users can change the utilized model by providing their model checkpoint path. This can be achieved by modifying the `get_model_checkpoint_path` function in the script by setting argument to `selection='last'`, which returns the checkpoint path for the `load_from_checkpoint` method.
+
+![Real-time Visualization](images/iss_visualization.png)
