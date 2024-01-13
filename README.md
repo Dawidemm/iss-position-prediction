@@ -2,6 +2,25 @@
 
 The goal of the project is to develop a system for predicting the position of the International Space Station (ISS) in geographical coordinate space. To achieve this goal, a set of tools and scripts has been prepared to collect data, train the model and visualize the actual and predicted position of the ISS.
 
+## Installation
+
+1. Clone the repository:
+
+    ```bash
+    git clone https://github.com/Dawidemm/iss-position-prediction
+    cd iss-position-prediction
+    ```
+
+2. Python Version:
+
+   This project is developed using Python version 3.10.9.
+
+3. Install the required libraries using the provided `requirements.txt` file:
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
 ## Description of executables:
 
 ### - generate_dataset.py
