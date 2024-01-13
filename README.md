@@ -97,5 +97,5 @@ The `main.py` script does the following:
 Note: Users can change the utilized model by providing their model checkpoint path. This can be achieved by modifying the `get_model_checkpoint_path` function in the script by setting argument to `selection='last'`, which returns the checkpoint path for the `load_from_checkpoint` method.
 
 <p align='center'>
-    <img src='images/iss_visualization.png' alt='Real-time Visualization' width='300' height='300'>
+    <img src='images/iss_visualization.png' alt='Real-time Visualization' width='400' height='400'>
 </p>
