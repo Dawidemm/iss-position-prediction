@@ -2,19 +2,15 @@ import torch
 from torch import nn
 import lightning as pl
 import torchmetrics
-from dataclasses import dataclass
 
-@dataclass
-class DataStep:
-    step: int = 1
 
 class LatLongPredictor(nn.Module):
     def __init__(self):
         super().__init__()
 
-        layers = [nn.Linear(2, 16 * DataStep.step),
-                  nn.Linear(16 * DataStep.step, 16 * DataStep.step),
-                  nn.Linear(16 * DataStep.step, 2)]
+        layers = [nn.Linear(2, 16),
+                  nn.Linear(16, 16),
+                  nn.Linear(16, 2)]
         
         self.net = nn.Sequential(*layers)
         
