@@ -1,12 +1,12 @@
 import torch
 from modules.iss_data_fetcher import FetchData
-from modules.predictor_module import DataStep, LightningLatLongPredictor
+from modules.predictor_module import LightningLatLongPredictor
 from modules.utils import draw_earth, draw_points, get_model_checkpoint_path
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from torchmetrics import MeanAbsoluteError
 
-DATA_STEP = DataStep.step
+
 animation_paused = False
 
 def pause_animation(event):
@@ -25,9 +25,9 @@ def update_plot(frame, model, ax, lon_lat, preds):
     net_input_latitude = []
     true_lon_lat = []
 
-    for i in range(DATA_STEP+1):
+    for i in range(2):
 
-        if i < DATA_STEP:
+        if i < 1:
             data = list(map(float, next(fetch_data)))
             net_input_longitude.append(data[0])
             net_input_latitude.append(data[1])
@@ -37,7 +37,7 @@ def update_plot(frame, model, ax, lon_lat, preds):
 
     net_input = torch.tensor([net_input_longitude, net_input_latitude], dtype=torch.float32)
     net_input = net_input.T
-    net_input = net_input.reshape(1, DATA_STEP, 2)
+    net_input = net_input.reshape(1, 1, 2)
 
     true_lon_lat = torch.tensor(true_lon_lat, dtype=torch.float32)
 

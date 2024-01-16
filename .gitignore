@@ -1,5 +1,6 @@
 __pycache__
 /lightinig_logs
-ModelWeights.h5
 .DS_Store
 litmodel.pt
+Dockerfile
+.dockerignore
