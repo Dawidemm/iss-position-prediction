@@ -87,6 +87,8 @@ def main():
     lit_model = LightningLatLongPredictor.load_from_checkpoint(
         checkpoint_path=get_model_checkpoint_path(selection='first'),
         map_location=torch.device('cpu'))
+    
+    lit_model.eval()
 
     lon_lat = []
     preds = []
