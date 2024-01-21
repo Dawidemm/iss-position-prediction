@@ -9,7 +9,7 @@ class LatLongDataset(Dataset):
     def __init__(self, csv_file: str):
         self.data = pd.read_csv(csv_file, header=0)
         self.data = self.data.drop_duplicates()
-        self.max_val = 180
+        self.data_normalized = self.data / 180
         self.num_samples = len(self.data)
 
     def __len__(self):
@@ -17,13 +17,13 @@ class LatLongDataset(Dataset):
 
     def __getitem__(self, index):
 
-        current_row = self.data.iloc[index].values
-        target = self.data.iloc[index+1].values
+        current_row = self.data_normalized.iloc[index].values
+        target = self.data_normalized.iloc[index+1].values
 
-        current_row  = torch.tensor(current_row, dtype=torch.float32) /self.max_val
+        current_row  = torch.tensor(current_row, dtype=torch.float32)
         current_row = torch.reshape(current_row, (1, 2))
 
-        target = torch.tensor(target, dtype=torch.float32) /self.max_val
+        target = torch.tensor(target, dtype=torch.float32)
         target = torch.reshape(target, (1, 2))
         
         return current_row, target
