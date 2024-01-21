@@ -12,6 +12,7 @@ TRAIN_DATASET_PATH = 'datasets/test_dataset.csv'
 VAL_DATASET_PATH = 'datasets/val_dataset.csv'
 TEST_DATASET_PATH = 'datasets/test_dataset.csv'
 BATCH_SIZE = 128
+SEQUENCE_LENGHT = 1
 MAX_EPOCHS = 50
 
 def train_pipeline():
@@ -35,7 +36,8 @@ def train_pipeline():
     datamodule = LightningLatLongDatamodule(train_csv=TRAIN_DATASET_PATH,
                                             val_csv=VAL_DATASET_PATH, 
                                             test_csv=TEST_DATASET_PATH, 
-                                            batch_size=BATCH_SIZE)
+                                            batch_size=BATCH_SIZE,
+                                            sequence_length=SEQUENCE_LENGHT)
     
     datamodule.setup(stage='train')
 
