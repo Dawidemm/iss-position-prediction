@@ -46,7 +46,8 @@ class LightningLatLongPredictor(pl.LightningModule):
 
     def test_step(self, batch, batch_idx):
         loss, y, outputs = self._shared_step(batch, batch_idx)
-
+        self.log('test_loss', loss)
+        
         return {"test_loss": loss}
 
     def configure_optimizers(self):
