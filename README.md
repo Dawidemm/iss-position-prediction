@@ -84,7 +84,38 @@ The `train_pipeline` function performs the following steps:
 
 Note: Users can modify the paths to CSV files (`TRAIN_DATASET_PATH`, `VAL_DATASET_PATH`, `TEST_DATASET_PATH`) in the script to point to their generated datasets.
 
-### - main.py
+### - app.py
+
+The `app.py` file implements a Flask web application for predicting the position of the International Space Station (ISS) in real-time using a trained model. Below is a breakdown of the components and instructions for running the application:
+
+#### Functionality
+
+- **Flask Application Setup**: Initializes a Flask application.
+- **GetData Class**: Defines a class for fetching real-time data and making predictions using a trained model.
+- **Flask Routes**:
+  - `/`: Renders the main HTML template.
+  - `/stream`: Streams real-time ISS data and predictions to the client.
+- **HTML Template**: Provides a simple HTML page with a Plotly chart to visualize the true and predicted positions of the ISS.
+- **JavaScript**:
+  - Sets up a Plotly chart for real-time visualization.
+  - Establishes an EventSource to stream data from the server.
+  - Updates the Plotly chart with new data received from the server.
+
+#### Usage
+
+1. Ensure you have Python and the required dependencies installed.
+2. **Navigate to the `is-position-prediction` directory** in your terminal.
+3. Run the following command in your terminal to start the Flask application:
+
+    ```bash
+    python src/app.py
+    ```
+
+4. The application will start, and the address where you can access it will be displayed in the terminal, typically in the format `http://127.0.0.1:5000`.
+
+5. Open your web browser and navigate to the displayed address to access the ISS prediction web interface.
+
+### - visualization.py
 
 This script provides a real-time visualization of the predictions made by the trained model (`LightningLatLongPredictor`) on longitude and latitude coordinates. The visualization includes both true and predicted points in a 3D plot.
 
@@ -122,35 +153,3 @@ Note: Users can change the utilized model by providing their model checkpoint pa
 <p align='center'>
     <img src='images/iss_visualization.png' alt='Real-time Visualization' width='400' height='400'>
 </p>
-
-
-### - ISS Prediction Web Application (app.py)
-
-The `app.py` file implements a Flask web application for predicting the position of the International Space Station (ISS) in real-time using a trained model. Below is a breakdown of the components and instructions for running the application:
-
-#### Functionality
-
-- **Flask Application Setup**: Initializes a Flask application.
-- **GetData Class**: Defines a class for fetching real-time data and making predictions using a trained model.
-- **Flask Routes**:
-  - `/`: Renders the main HTML template.
-  - `/stream`: Streams real-time ISS data and predictions to the client.
-- **HTML Template**: Provides a simple HTML page with a Plotly chart to visualize the true and predicted positions of the ISS.
-- **JavaScript**:
-  - Sets up a Plotly chart for real-time visualization.
-  - Establishes an EventSource to stream data from the server.
-  - Updates the Plotly chart with new data received from the server.
-
-#### Usage
-
-1. Ensure you have Python and the required dependencies installed.
-2. **Navigate to the `is-position-prediction` directory** in your terminal.
-3. Run the following command in your terminal to start the Flask application:
-
-    ```bash
-    python src/app.py
-    ```
-
-4. The application will start, and the address where you can access it will be displayed in the terminal, typically in the format `http://127.0.0.1:5000`.
-
-5. Open your web browser and navigate to the displayed address to access the ISS prediction web interface.
