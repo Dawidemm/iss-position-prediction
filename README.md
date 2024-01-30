@@ -149,4 +149,6 @@ The `app.py` file implements a Flask web application for predicting the position
     python app.py
     ```
 
-3. Once the application is running, open your web browser and navigate to `http://localhost:5000/` to access the ISS prediction web interface.
+3. The application will start, and the address where you can access it will be displayed in the terminal, typically in the format `http://127.0.0.1:5000`.
+
+4. Open your web browser and navigate to the displayed address to access the ISS prediction web interface.
