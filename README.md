@@ -93,12 +93,12 @@ This script provides a real-time visualization of the predictions made by the tr
 1. Run the script:
 
     ```bash
-    python main.py
+    python visualization.py
     ```
 
 #### Real-time Visualization
 
-The `main.py` script does the following:
+The `visualization.py` script does the following:
 
 1. Loads a pre-trained PyTorch Lightning model (`LightningLatLongPredictor`) from a specified checkpoint using the `get_model_checkpoint_path` utility function.
 
@@ -117,7 +117,36 @@ The `main.py` script does the following:
 
 Note: Users can change the utilized model by providing their model checkpoint path. This can be achieved by modifying the `get_model_checkpoint_path` function in the script by setting argument to `selection='last'`, which returns the checkpoint path for the `load_from_checkpoint` method.
 
-#### Eample main.py output
+#### Eample visualization.py output
 <p align='center'>
     <img src='images/iss_visualization.png' alt='Real-time Visualization' width='400' height='400'>
 </p>
+
+
+### - ISS Prediction Web Application (app.py)
+
+The `app.py` file implements a Flask web application for predicting the position of the International Space Station (ISS) in real-time using a trained model. Below is a breakdown of the components and instructions for running the application:
+
+#### Functionality
+
+- **Flask Application Setup**: Initializes a Flask application.
+- **GetData Class**: Defines a class for fetching real-time data and making predictions using a trained model.
+- **Flask Routes**:
+  - `/`: Renders the main HTML template.
+  - `/stream`: Streams real-time ISS data and predictions to the client.
+- **HTML Template**: Provides a simple HTML page with a Plotly chart to visualize the true and predicted positions of the ISS.
+- **JavaScript**:
+  - Sets up a Plotly chart for real-time visualization.
+  - Establishes an EventSource to stream data from the server.
+  - Updates the Plotly chart with new data received from the server.
+
+#### Usage
+
+1. Ensure you have Python and the required dependencies installed.
+2. Run the following command in your terminal to start the Flask application:
+
+    ```bash
+    python app.py
+    ```
+
+3. Once the application is running, open your web browser and navigate to `http://localhost:5000/` to access the ISS prediction web interface.
