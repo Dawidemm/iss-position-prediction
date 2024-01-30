@@ -25,7 +25,7 @@ The goal of the project is to develop a system for predicting the position of th
 
 ### - generate_dataset.py
 
-This script utilizes the `GenerateDataset` class from the `modules.dataset_generator` module to generate datasets for training, validation, and testing.
+This script utilizes the `GenerateDataset` class from the `modules.dataset_generator` module to generate new datasets for training, validation, and testing.
 
 #### Usage
 
@@ -35,18 +35,20 @@ This script utilizes the `GenerateDataset` class from the `modules.dataset_gener
     python generate_dataset.py
     ```
 
-2. Running this code will generate new datasets for training, validation, and testing. These datasets can be used for model training in the `train_pipeline.py` file.
+2. Upon execution, the program collects data in real-time to generate new datasets for training, validation, and testing. Please note that the process may take some time due to real-time data collection.
+
+3. The generated datasets can be utilized for model training in the `train_pipeline.py` file.
 
 #### Functionality
 
 The script defines a `generate_dataset` function that takes two parameters:
 - `type` (str): Specifies the type of dataset to generate ('new_train', 'new_val', or 'new_test').
-- `duration` (int): Specifies the duration of the dataset in seconds.
+- `samples` (int): Specifies the number of samples to be collected for the dataset.
 
-The script generates three datasets with different types and durations:
-1. Training dataset: `generate_dataset(type='new_train', duration=700)`
-2. Validation dataset: `generate_dataset(type='new_val', duration=200)`
-3. Testing dataset: `generate_dataset(type='new_test', duration=100)`
+The script generates three datasets with different types and sample sizes:
+1. Training dataset: `generate_dataset(type='new_train', samples=700)`
+2. Validation dataset: `generate_dataset(type='new_val', samples=200)`
+3. Testing dataset: `generate_dataset(type='new_test', samples=100)`
 
 Datasets are saved as CSV files using the `save_as_csv` method of the `GenerateDataset` class.
 
