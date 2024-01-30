@@ -90,10 +90,11 @@ This script provides a real-time visualization of the predictions made by the tr
 
 #### Usage
 
-1. Run the script:
+1. **Navigate to the `is-position-prediction` directory** in your terminal.
+2. Run the script:
 
     ```bash
-    python visualization.py
+    python src/visualization.py
     ```
 
 #### Real-time Visualization
@@ -143,12 +144,13 @@ The `app.py` file implements a Flask web application for predicting the position
 #### Usage
 
 1. Ensure you have Python and the required dependencies installed.
-2. Run the following command in your terminal to start the Flask application:
+2. **Navigate to the `is-position-prediction` directory** in your terminal.
+3. Run the following command in your terminal to start the Flask application:
 
     ```bash
-    python app.py
+    python src/app.py
     ```
 
-3. The application will start, and the address where you can access it will be displayed in the terminal, typically in the format `http://127.0.0.1:5000`.
+4. The application will start, and the address where you can access it will be displayed in the terminal, typically in the format `http://127.0.0.1:5000`.
 
-4. Open your web browser and navigate to the displayed address to access the ISS prediction web interface.
+5. Open your web browser and navigate to the displayed address to access the ISS prediction web interface.
