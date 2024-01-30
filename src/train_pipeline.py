@@ -12,6 +12,7 @@ TRAIN_DATASET_PATH = 'datasets/test_dataset.csv'
 VAL_DATASET_PATH = 'datasets/val_dataset.csv'
 TEST_DATASET_PATH = 'datasets/test_dataset.csv'
 BATCH_SIZE = 128
+SEQUENCE_LENGHT = 1
 MAX_EPOCHS = 50
 
 def train_pipeline():
@@ -32,31 +33,39 @@ def train_pipeline():
     5. Evaluates the trained model on the test data and prints the Mean Squared Error (MSE).
     '''
 
-    datamodule = LightningLatLongDatamodule(train_csv=TRAIN_DATASET_PATH,
-                                            val_csv=VAL_DATASET_PATH, 
-                                            test_csv=TEST_DATASET_PATH, 
-                                            batch_size=BATCH_SIZE)
+    datamodule = LightningLatLongDatamodule(
+        train_csv=TRAIN_DATASET_PATH,
+        val_csv=VAL_DATASET_PATH, 
+        test_csv=TEST_DATASET_PATH, 
+        batch_size=BATCH_SIZE,
+        sequence_length=SEQUENCE_LENGHT
+    )
     
     datamodule.setup(stage='train')
 
     lit_model = LightningLatLongPredictor()
 
-    early_stopping = EarlyStopping(monitor='val_loss',
-                                   mode='min',
-                                   min_delta=0.001,
-                                   patience=5)
+    early_stopping = EarlyStopping(
+        monitor='val_loss',
+        mode='min',
+        min_delta=0.001,
+        patience=5
+    )
     
-    checkpoint_callback = ModelCheckpoint(save_top_k=1,
-                                          monitor='val_loss',
-                                          mode='min',
-                                          dirpath='src/checkpoints/',
-                                          filename=f'model=v{get_model_version()}' + '-{epoch:02d}-{val_loss:.4e}' + f'-batch_size={BATCH_SIZE}')
+    checkpoint_callback = ModelCheckpoint(
+        save_top_k=1,
+        monitor='val_loss',
+        mode='min',
+        dirpath='src/checkpoints/',
+        filename=f'model=v{get_model_version()}' + '-{epoch:02d}-{val_loss:.4e}' + f'-batch_size={BATCH_SIZE}'
+    )
 
     trainer = pl.Trainer(
         max_epochs=MAX_EPOCHS, 
         accelerator='auto', 
         callbacks=[early_stopping, checkpoint_callback],
-        logger=False)
+        logger=False
+    )
 
     trainer.fit(lit_model, datamodule=datamodule)
 

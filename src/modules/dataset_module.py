@@ -6,42 +6,44 @@ from lightning import LightningDataModule
 torch.manual_seed(10)
 
 class LatLongDataset(Dataset):
-    def __init__(self, csv_file: str):
+    def __init__(self, csv_file: str, sequence_length: int):
         self.data = pd.read_csv(csv_file, header=0)
         self.data = self.data.drop_duplicates()
-        self.max_val = 180
+        self.data_normalized = self.data / 180
+        self.sequence_lenght = sequence_length
         self.num_samples = len(self.data)
 
     def __len__(self):
-        return self.num_samples - 1
+        return self.num_samples - self.sequence_lenght
 
     def __getitem__(self, index):
 
-        current_row = self.data.iloc[index].values
-        target = self.data.iloc[index+1].values
+        current_row = self.data_normalized.iloc[index:index+self.sequence_lenght].values
+        target = self.data_normalized.iloc[index+self.sequence_lenght].values
 
-        current_row  = torch.tensor(current_row, dtype=torch.float32) /self.max_val
-        current_row = torch.reshape(current_row, (1, 2))
+        current_row  = torch.tensor(current_row, dtype=torch.float32)
+        current_row = torch.reshape(current_row, (self.sequence_lenght, 2))
 
-        target = torch.tensor(target, dtype=torch.float32) /self.max_val
+        target = torch.tensor(target, dtype=torch.float32)
         target = torch.reshape(target, (1, 2))
         
         return current_row, target
     
 class LightningLatLongDatamodule(LightningDataModule):
-    def __init__(self, train_csv: str, val_csv: str, test_csv, batch_size: int):
+    def __init__(self, train_csv: str, val_csv: str, test_csv, batch_size: int, sequence_length: int):
         super().__init__()
         self.train_csv = train_csv
         self.val_csv = val_csv
         self.test_csv = test_csv
         self.batch_size = batch_size
+        self.sequence_lenght = sequence_length
 
     def setup(self, stage: str):
         if stage == 'fit':
-            self.train_dataset = LatLongDataset(csv_file=self.train_csv)
-            self.val_dataset = LatLongDataset(csv_file=self.val_csv)
+            self.train_dataset = LatLongDataset(csv_file=self.train_csv, sequence_length=self.sequence_lenght)
+            self.val_dataset = LatLongDataset(csv_file=self.val_csv, sequence_length=self.sequence_lenght)
         if stage == 'test':
-            self.test_dataset = LatLongDataset(csv_file=self.test_csv)
+            self.test_dataset = LatLongDataset(csv_file=self.test_csv, sequence_length=self.sequence_lenght)
 
     def train_dataloader(self) -> DataLoader:
         return DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=False)

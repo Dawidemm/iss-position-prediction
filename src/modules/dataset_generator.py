@@ -6,14 +6,14 @@ class GenerateDataset():
 
     Args:
     - type (str): The typeof the dataset.
-    - duration (int): The duration, number of data points, to be generated and saved.
+    - samples (int): The number of samples (data points) to be generated and saved.
 
     Methods:
     - save_as_csv(): Fetches geographical coordinates using a data generator and saves them as a csv file'.
     '''
 
-    def __init__(self, type: str, duration: int):
-        self.duration = duration
+    def __init__(self, type: str, samples: int):
+        self.samples = samples
         self.type = type
 
     def save_as_csv(self):
@@ -23,6 +23,6 @@ class GenerateDataset():
 
         data_generator = FetchData()
         
-        for _ in range(self.duration):
+        for _ in range(self.samples):
             position = next(data_generator)
             trainig_dataset.write(f'{position[0]},{position[1]}\n')
