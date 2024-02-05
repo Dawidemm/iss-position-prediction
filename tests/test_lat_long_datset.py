@@ -7,12 +7,12 @@ def dataset():
     return LatLongDataset('datasets/test_dataset.csv', sequence_length=4)
 
 def test_len(dataset):
-    assert len(dataset) == len(dataset.data) - dataset.sequence_lenght
+    assert len(dataset) == len(dataset.data) - dataset.sequence_length
 
 def test_getitem(dataset):
     sample_index = 0
     sample_sequence, sample_target = dataset[sample_index]
-    assert sample_sequence.shape == (dataset.sequence_lenght, 2)
+    assert sample_sequence.shape == (dataset.sequence_length, 2)
     assert sample_target.shape == (1, 2)
 
 def test_sequence_values(dataset):
@@ -42,7 +42,7 @@ def test_target_normalization(dataset):
 def test_target(dataset):
     sample_index = 0
     _, sample_target = dataset[sample_index]
-    original_index = sample_index + dataset.sequence_lenght
+    original_index = sample_index + dataset.sequence_length
     original_data = dataset.data.iloc[original_index].values
     original_target = original_data / 180
     assert torch.allclose(sample_target, torch.tensor(original_target, dtype=torch.float32))
