@@ -4,4 +4,4 @@ __pycache__
 litmodel.pt
 Dockerfile
 .dockerignore
-.vscode
+.pytest_cache
