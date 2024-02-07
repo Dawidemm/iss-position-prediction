@@ -5,3 +5,6 @@ litmodel.pt
 Dockerfile
 .dockerignore
 .pytest_cache
+pyproject.toml
+setup.cfg
+setup.py
