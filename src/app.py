@@ -2,9 +2,9 @@ from flask import Flask, render_template, Response
 import plotly.graph_objects as go
 import json
 import torch
-from modules.iss_data_fetcher import FetchData
-from modules.predictor_module import LightningLatLongPredictor
-from modules.utils import get_model_checkpoint_path
+from src.modules.iss_data_fetcher import FetchData
+from src.modules.predictor_module import LightningLatLongPredictor
+from src.modules.utils import get_model_checkpoint_path
 
 app = Flask(__name__)
 
