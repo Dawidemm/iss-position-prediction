@@ -29,12 +29,21 @@ class FetchData():
         self.url = url
 
     def __next__(self) -> tuple:
-
-        answer = requests.get(self.url)
-        answer = json.loads(answer.text)
-        position = answer['iss_position']
-
-        return position['longitude'], position['latitude']
+    
+        try:
+            answer = requests.get(self.url)
+            answer.raise_for_status()
+            position = answer.json()['iss_position']
+            longitude, latitude = position['longitude'], position['latitude']
+            return longitude, latitude
+        
+        except requests.RequestException as e:
+            print(f"Error fetching data: {e}")
+            raise StopIteration
+        
+        except KeyError as e:
+            print(f"Error parsing response: {e}")
+            raise StopIteration
 
     def __iter__(self):
         return self
