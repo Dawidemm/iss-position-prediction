@@ -9,6 +9,10 @@ def dataset():
 def test_len(dataset):
     assert len(dataset) == len(dataset.data) - dataset.sequence_length
 
+def test_out_of_range_index(dataset):
+    with pytest.raises(IndexError):
+        sample = dataset[len(dataset)]
+
 def test_getitem(dataset):
     sample_index = 0
     sample_sequence, sample_target = dataset[sample_index]
@@ -46,3 +50,9 @@ def test_target(dataset):
     original_data = dataset.data.iloc[original_index].values
     original_target = original_data / 180
     assert torch.allclose(sample_target, torch.tensor(original_target, dtype=torch.float32))
+
+def test_data_format(dataset):
+    sample_index = 0
+    sample_sequence, sample_target = dataset[sample_index]
+    assert isinstance(sample_sequence, torch.Tensor)
+    assert isinstance(sample_target, torch.Tensor)
