@@ -54,8 +54,8 @@ def update_plot(frame, model, ax, lon_lat, preds):
     mae = MeanAbsoluteError()
     mean_abs_err = mae(pred, true_lon_lat)
 
-    draw_points(ax, lon_lat, label='True')
-    draw_points(ax, preds, label='Pred')
+    draw_points(ax, lon_lat, label='True Position')
+    draw_points(ax, preds, label='Predicted Position')
 
     ax.set_xticks([])
     ax.set_yticks([])
@@ -80,6 +80,7 @@ def update_plot(frame, model, ax, lon_lat, preds):
         ani.event_source.start()
 
     ax.legend()
+    ax.set_title('ISS Position Prediction')
 
 def main():
     global ani
