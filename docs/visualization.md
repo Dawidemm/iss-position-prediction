@@ -8,7 +8,7 @@ This script provides a real-time visualization of the predictions made by the tr
 2. Run the script:
 
     ```bash
-    python src/visualization.py
+    python src/scripts/visualization.py
     ```
 
 #### Real-time Visualization

@@ -7,7 +7,7 @@ This script utilizes the `GenerateDataset` class from the `modules.dataset_gener
 1. Run the script using the following command:
 
     ```bash
-    python generate_dataset.py
+    python src/scripts/generate_dataset.py
     ```
 
 2. Upon execution, the program collects data in real-time to generate new datasets for training, validation, and testing. Please note that the process may take some time due to real-time data collection.

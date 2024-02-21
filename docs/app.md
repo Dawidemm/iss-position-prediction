@@ -22,7 +22,7 @@ The `app.py` file implements a Flask web application for predicting the position
 3. Run the following command in your terminal to start the Flask application:
 
     ```bash
-    python src/app.py
+    python src/scripts/app.py
     ```
 
 4. The application will start, and the address where you can access it will be displayed in the terminal, typically in the format `http://127.0.0.1:5000`.

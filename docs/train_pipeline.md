@@ -7,7 +7,7 @@ This script defines a PyTorch Lightning training pipeline for a machine learning
 1. Run the script:
 
     ```bash
-    python train_pipeline.py
+    python src/scripts/train_pipeline.py
     ```
 
 #### Training Pipeline
