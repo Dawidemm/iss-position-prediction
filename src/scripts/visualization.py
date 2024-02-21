@@ -1,7 +1,7 @@
 import torch
-from modules.iss_data_fetcher import FetchData
-from modules.predictor_module import LightningLatLongPredictor
-from modules.utils import draw_earth, draw_points, get_model_checkpoint_path
+from src.modules.iss_data_fetcher import FetchData
+from src.modules.predictor_module import LightningLatLongPredictor
+from src.modules.utils import draw_earth, draw_points, get_model_checkpoint_path
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from torchmetrics import MeanAbsoluteError
@@ -54,8 +54,8 @@ def update_plot(frame, model, ax, lon_lat, preds):
     mae = MeanAbsoluteError()
     mean_abs_err = mae(pred, true_lon_lat)
 
-    draw_points(ax, lon_lat, label='True')
-    draw_points(ax, preds, label='Pred')
+    draw_points(ax, lon_lat, label='True Position')
+    draw_points(ax, preds, label='Predicted Position')
 
     ax.set_xticks([])
     ax.set_yticks([])
@@ -80,6 +80,7 @@ def update_plot(frame, model, ax, lon_lat, preds):
         ani.event_source.start()
 
     ax.legend()
+    ax.set_title('ISS Position Prediction')
 
 def main():
     global ani

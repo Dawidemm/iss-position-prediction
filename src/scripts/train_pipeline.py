@@ -2,9 +2,9 @@ import torch
 import lightning as pl
 from lightning.pytorch.callbacks import EarlyStopping, ModelCheckpoint
 
-from modules.dataset_module import LightningLatLongDatamodule
-from modules.predictor_module import LightningLatLongPredictor
-from modules.utils import get_model_version
+from src.modules.dataset_module import LightningLatLongDatamodule
+from src.modules.predictor_module import LightningLatLongPredictor
+from src.modules.utils import get_model_version
 
 torch.manual_seed(10)
     

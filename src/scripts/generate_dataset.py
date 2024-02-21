@@ -1,4 +1,4 @@
-from modules.dataset_generator import GenerateDataset
+from src.modules.dataset_generator import GenerateDataset
 
 def generate_dataset(type: str, samples: int):
     GenerateDataset(type=type, samples=samples).save_as_csv()
