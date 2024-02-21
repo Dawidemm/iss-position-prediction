@@ -1,4 +1,4 @@
-from modules.iss_data_fetcher import FetchData
+from src.modules.iss_data_fetcher import FetchData
 
 class GenerateDataset():
     '''
