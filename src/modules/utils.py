@@ -89,14 +89,14 @@ def draw_points(ax, data, label, earth_radius=EARTH_RADIUS, iss_orbit_radius=ISS
     plt.show()
     '''
 
-    if label == 'Pred':
+    if label == 'Predicted Position':
         color = 'red'
         color_last = 'orange'
-    elif label == 'True':
+    elif label == 'True Position':
         color = 'blue'
         color_last = 'cyan'
     else:
-        raise ValueError(f'Pick one from ["Preds", "True"].')
+        raise ValueError(f'Pick one from ["Predicted Position", "True Position"].')
 
     for i in range(len(data)):
 
