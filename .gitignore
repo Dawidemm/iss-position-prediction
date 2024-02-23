@@ -2,7 +2,5 @@ __pycache__
 /lightinig_logs
 .DS_Store
 litmodel.pt
-Dockerfile
-.dockerignore
 .pytest_cache
 *.egg-info
