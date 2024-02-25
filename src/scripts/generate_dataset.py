@@ -11,12 +11,12 @@ if __name__ == '__main__':
 
     parser.add_argument('-d', '--datasets', nargs='+', type=str,
                         help='List of datasets to generate, each dataset should be in the format type:samples. '
-                             'Example: -d new_train:700 new_val:200 new_test:100')
+                             'Example: -d user_train:700 user_val:200 user_test:100')
 
     args = parser.parse_args()
 
     if args.datasets is None:
-        datasets = [['new_train', '700'], ['new_val', '200'], ['new_test', '100']]
+        datasets = [['user_train', '700'], ['user_val', '200'], ['user_test', '100']]
     else:
         datasets = [dataset.split(':') for dataset in args.datasets]
 
