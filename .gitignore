@@ -1,5 +1,5 @@
 __pycache__
-/lightinig_logs
+/lightning_logs
 .DS_Store
 litmodel.pt
 .pytest_cache
