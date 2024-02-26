@@ -109,27 +109,6 @@ def draw_points(ax, data, label, earth_radius=EARTH_RADIUS, iss_orbit_radius=ISS
             ax.scatter(x, y, z, c=color, marker='o')
         else:
             ax.scatter(x, y, z, c=color_last, marker='x')
-
-def get_model_version(checkpoints_dir='src/checkpoints'):
-    '''
-    Check the number of model versions in the specified directory.
-
-    Parameters:
-    - checkpoints_dir (str): Directory containing model checkpoints.
-
-    Returns:
-    - str: A string representation of the number of model versions in the directory.
-           If the directory doesn't exist, '0' is returned.
-           Otherwise, the count of model versions is returned as a string.
-    '''
-
-    if not os.path.exists(checkpoints_dir):
-        return f'0'
-    
-    else:
-        models = os.listdir(checkpoints_dir)
-
-        return f'{len(models)}'
     
 def get_model_checkpoint_path(checkpoints_dir='src/checkpoints', selection=None):
     '''
