@@ -110,39 +110,70 @@ def draw_points(ax, data, label, earth_radius=EARTH_RADIUS, iss_orbit_radius=ISS
         else:
             ax.scatter(x, y, z, c=color_last, marker='x')
     
-def get_model_checkpoint_path(checkpoints_dir='src/checkpoints', selection=None):
-    '''
-    Get the path to the selected version of the model from the specified directory.
+class FolderNotFoundError(Exception):
+    pass
 
-    Parameters:
-    - checkpoints_dir (str): Directory containing model checkpoints.
-    - selection (str): Specify 'first' to get the path to the first checkpoint,
-                      or 'last' to get the path to the last checkpoint.
+def get_model_checkpoint_path(model: str):
+    '''
+     Retrieves the paths to the checkpoint file and the hparams.yaml file for the specified model.
+
+    Args:
+    - model (str): A string indicating the type of model to retrieve the paths for.
+      Possible values:
+      - 'pretrained': Indicates that the paths for a pretrained model should be retrieved.
+      - 'user': Indicates that the paths for a user model should be retrieved.
 
     Returns:
-    - model_path (str): Path to the selected model checkpoint.
+    - If 'model' is 'pretrained':
+      - pretrained_model_checkpoint_path (str): The path to the pretrained model checkpoint file.
+      - pretrained_model_hparams_path (str): The path to the hparams.yaml file for the pretrained model.
+
+    - If 'model' is 'user':
+      - ckpt_file_path (str): The path to the checkpoint file for the user model.
+      - hparams_yaml_path (str): The path to the hparams.yaml file for the user model.
+
+    Raises:
+    - FolderNotFoundError: If the 'lightning_logs' folder is not found in the current directory.
+    - FolderNotFoundError: If no version folders are found within the 'lightning_logs' directory.
+    - FileNotFoundError: If no checkpoint file is found within the 'checkpoints' folder for the user model.
+    - ValueError: If an invalid value is provided for the 'model' parameter.
     '''
 
-    if selection not in ['first', 'last']:
-        raise ValueError("Invalid value for 'selection'. Use 'first' or 'last'.")
+    pretrained_model_checkpoint_path = 'src/checkpoints/pretrained_model.ckpt'
+    pretrained_model_hparams_path = 'src/checkpoints/hparams.yaml'
+    
+    if model == 'pretrained':
+        return pretrained_model_checkpoint_path, pretrained_model_hparams_path
+    
+    elif model == 'user':
 
-    if not os.path.exists(checkpoints_dir):
-        raise FileNotFoundError(f"Directory not found: {checkpoints_dir}")
+        current_directory = os.getcwd()
+        lightning_logs_path = os.path.join(current_directory, 'lightning_logs')
 
-    files = os.listdir(checkpoints_dir)
+        if not os.path.exists(lightning_logs_path):
+            raise FolderNotFoundError("Folder 'lightning_logs' not found. Please execute training using the 'train_pipeline.py' script.")
 
-    checkpoint_files = [file for file in files if file.endswith('.ckpt')]
+        version_folders = [folder for folder in os.listdir(lightning_logs_path)]
+        if not version_folders:
+            raise FolderNotFoundError("No version folders found in 'lightning_logs' directory.")
 
-    if not checkpoint_files:
-        raise FileNotFoundError(f"No model checkpoints found in directory: {checkpoints_dir}")
+        lastest_version_folder = version_folders[-1]
 
-    checkpoint_files.sort(key=lambda x: os.path.getmtime(os.path.join(checkpoints_dir, x)), reverse=False)
+        latest_version_folder_path = os.path.join(lightning_logs_path, lastest_version_folder)
 
-    if selection == 'first':
-        selected_checkpoint = checkpoint_files[0]
-    elif selection == 'last':
-        selected_checkpoint = checkpoint_files[-1]
+        hparams_yaml_path = os.path.join(lightning_logs_path, latest_version_folder_path, 'hparams.yaml')
 
-    selected_checkpoint_path = os.path.join(checkpoints_dir, selected_checkpoint)
+        checkpoints_folder = os.path.join(lightning_logs_path, latest_version_folder_path, 'checkpoints')
+        checkpoints = os.listdir(checkpoints_folder)
 
-    return selected_checkpoint_path
+        ckpt_files = [file for file in checkpoints if file.endswith('.ckpt')]
+        if not ckpt_files:
+            raise FileNotFoundError("No checkpoint file found in the 'checkpoints' folder.")
+        
+        ckpt_file = ckpt_files[0]
+        ckpt_file_path = os.path.join(checkpoints_folder, ckpt_file)
+
+        return ckpt_file_path, hparams_yaml_path
+    
+    else:
+        raise ValueError('Invalid value for "model". Use "pretrained" or "user".')
