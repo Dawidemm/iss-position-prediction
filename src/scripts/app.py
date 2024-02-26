@@ -11,8 +11,10 @@ app = Flask(__name__)
 class GetData():
     def __init__(self):
         self.fetcher = FetchData()
+        model_checkpoint = get_model_checkpoint_path(model='pretrained')
         self.model = LightningLatLongPredictor.load_from_checkpoint(
-            checkpoint_path=get_model_checkpoint_path(selection='first'),
+            checkpoint_path=model_checkpoint[0],
+            hparams_file=model_checkpoint[1],
             map_location=torch.device('cpu'))
     
     def data_and_preds(self):

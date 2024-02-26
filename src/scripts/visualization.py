@@ -85,8 +85,10 @@ def update_plot(frame, model, ax, lon_lat, preds):
 def main():
     global ani
 
+    model_checkpoint = get_model_checkpoint_path(model='pretrained')
     lit_model = LightningLatLongPredictor.load_from_checkpoint(
-        checkpoint_path=get_model_checkpoint_path(selection='first'),
+        checkpoint_path=model_checkpoint[0],
+        hparams_file=model_checkpoint[1],
         map_location=torch.device('cpu'))
     
     lit_model.eval()
