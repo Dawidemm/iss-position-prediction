@@ -157,7 +157,7 @@ def get_model_checkpoint_path(model: str):
         if not version_folders:
             raise FolderNotFoundError("No version folders found in 'lightning_logs' directory.")
 
-        lastest_version_folder = version_folders[-1]
+        lastest_version_folder = version_folders[0]
 
         latest_version_folder_path = os.path.join(lightning_logs_path, lastest_version_folder)
 
