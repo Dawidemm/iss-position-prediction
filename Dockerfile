@@ -8,5 +8,3 @@ RUN pip install --upgrade pip && \
     pip install .
 
 EXPOSE 3000
-
-CMD ["python", "src/scripts/app.py"]

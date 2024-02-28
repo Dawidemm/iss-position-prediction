@@ -2,6 +2,7 @@ from flask import Flask, render_template, Response
 import plotly.graph_objects as go
 import json
 import torch
+import argparse
 from src.modules.iss_data_fetcher import FetchData
 from src.modules.predictor_module import LightningLatLongPredictor
 from src.modules.utils import get_model_checkpoint_path
@@ -9,10 +10,16 @@ from src.modules.utils import get_model_checkpoint_path
 app = Flask(__name__)
 
 class GetData():
-    def __init__(self):
+    def __init__(self, model):
         self.fetcher = FetchData()
+        if model == 'user':
+            model_checkpoint = get_model_checkpoint_path(model='user')
+        else:
+            model_checkpoint = get_model_checkpoint_path(model='pretrained')
+        print(model_checkpoint)
         self.model = LightningLatLongPredictor.load_from_checkpoint(
-            checkpoint_path=get_model_checkpoint_path(selection='first'),
+            checkpoint_path=model_checkpoint[0],
+            hparams_file=model_checkpoint[1],
             map_location=torch.device('cpu'))
     
     def data_and_preds(self):
@@ -52,11 +59,20 @@ def index():
 
 @app.route('/stream')
 def stream():
-    get_data = GetData()
+    get_data = GetData(app.config['MODEL'])
     def generate():
         for data_point in get_data.data_and_preds():
             yield f"data: {json.dumps(data_point)}\n\n"
     return Response(generate(), content_type='text/event-stream')
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--user', action='store_true', help='Use user-defined model')
+    args = parser.parse_args()
+
+    if args.user:
+        app.config['MODEL'] = 'user'
+    else:
+        app.config['MODEL'] = 'pretrained'
+
     app.run(host='0.0.0.0', port=3000, threaded=True)

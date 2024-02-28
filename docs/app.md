@@ -25,6 +25,8 @@ The `app.py` file implements a Flask web application for predicting the position
     python src/scripts/app.py
     ```
 
-4. The application will start, and the address where you can access it will be displayed in the terminal, typically in the format `http://127.0.0.1:5000`.
+4. The application will start, and the address where you can access it will be displayed in the terminal, typically in the format `http://127.0.0.1:3000`.
 
 5. Open your web browser and navigate to the displayed address to access the ISS prediction web interface.
+
+Note: By default, the script utilizes a pre-trained model. However, users can choose to use a user-trained model by specifying the `--user` flag. This flag modifies the behavior of the script to load the model checkpoint path suitable for user-trained model.
