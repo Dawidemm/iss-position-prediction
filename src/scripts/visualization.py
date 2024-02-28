@@ -1,4 +1,5 @@
 import torch
+import argparse
 from src.modules.iss_data_fetcher import FetchData
 from src.modules.predictor_module import LightningLatLongPredictor
 from src.modules.utils import draw_earth, draw_points, get_model_checkpoint_path
@@ -82,10 +83,14 @@ def update_plot(frame, model, ax, lon_lat, preds):
     ax.legend()
     ax.set_title('ISS Position Prediction')
 
-def main():
+def main(model):
     global ani
+    print(model)
+    if model == True:
+        model_checkpoint = get_model_checkpoint_path(model='user')
+    else:
+        model_checkpoint = get_model_checkpoint_path(model='pretrained')
 
-    model_checkpoint = get_model_checkpoint_path(model='pretrained')
     lit_model = LightningLatLongPredictor.load_from_checkpoint(
         checkpoint_path=model_checkpoint[0],
         hparams_file=model_checkpoint[1],
@@ -106,4 +111,8 @@ def main():
     plt.show()
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--user', action='store_true', help='Use user-defined model')
+    args = parser.parse_args()
+
+    main(model=args.user)
