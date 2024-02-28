@@ -30,4 +30,4 @@ The `visualization.py` script does the following:
 
 5. Allows pausing and resuming the animation by pressing any key.
 
-Note: Users can change the utilized model by providing their model checkpoint path. This can be achieved by modifying the `get_model_checkpoint_path` function in the script by setting argument to `selection='last'`, which returns the checkpoint path for the `load_from_checkpoint` method.
+Note: By default, the script utilizes a pre-trained model. However, users can choose to use a user-trained model by specifying the `--user` flag. This flag modifies the behavior of the script to load the model checkpoint path suitable for user-trained model.
