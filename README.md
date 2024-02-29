@@ -39,7 +39,7 @@ docker pull dawidem/iss-position-prediction-project:v1.0
 
 After pulling the image, you can run a container based on it using the following command:
 ```bash
-docker run -it -p 3000:3000 dawidem/iss-position-prediction-project:v1.0
+docker run -it -p 3000:3000 dawidem/iss-position-prediction-project:v1.0 /bin/bash
 ```
 
 ## Documentation
